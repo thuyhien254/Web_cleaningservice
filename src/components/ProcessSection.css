@@ -1,0 +1,90 @@
+.process-section {
+  text-align: center;
+  padding: 100px 60px;
+  background-color: #fff;
+}
+
+.process-title {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 60px;
+  color: #111;
+}
+
+/* Steps container */
+.process-steps {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+/* Step card */
+.process-step {
+  max-width: 260px;
+  text-align: center;
+}
+
+.process-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.step-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Text */
+.process-step h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+
+.process-step p {
+  font-size: 14px;
+  color: #777;
+  line-height: 1.6;
+}
+
+/* Arrow */
+.arrow-img {
+  width: 100px;
+  height: auto;
+  margin-top: 25px;
+  opacity: 0.6;
+}
+
+/* Button */
+.process-btn {
+  margin-top: 60px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.process-btn:hover {
+  background-color: #005ecb;
+  border-color: #004fa8;
+}

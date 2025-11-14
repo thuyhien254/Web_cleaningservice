@@ -1,9 +1,16 @@
-body {
+html, body, #root, .App {
+  height: auto;
+  overflow: visible;
   margin: 0;
+  padding: 0;
   font-family: "Poppins", sans-serif;
   background-color: #f9fcff;
 }
-.App {
-  height: auto;         
-  overflow: visible;   
+
+body {
+  padding-top: 80px; 
+}
+
+html {
+  overflow-y: auto;
 }

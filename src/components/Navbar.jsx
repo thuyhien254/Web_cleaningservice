@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 import logoImg from "../assets/logo.png";
 
 const Navbar = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
     <nav className="navbar">
       <div className="nav-logo">
@@ -11,9 +14,36 @@ const Navbar = () => {
       </div>
 
       <ul className="nav-links">
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact Us</a></li>
+        {/* 🏠 Về trang chủ */}
+        <li>
+          <Link to="/">About Us</Link>
+        </li>
+
+        {/* 📂 Dropdown Services */}
+        <li
+          className="dropdown"
+          onMouseEnter={() => setIsDropdownOpen(true)}
+          onMouseLeave={() => setIsDropdownOpen(false)}
+        >
+          <span className="dropdown-toggle">
+            Services ▾
+          </span>
+
+          {isDropdownOpen && (
+            <ul className="dropdown-menu">
+              <li>
+                <Link to="/house-cleaning">House Cleaning</Link>
+              </li>
+              <li>
+                <Link to="/house-moving">House Moving</Link>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        <li>
+          <Link to="/contact">Contact Us</Link>
+        </li>
       </ul>
 
       <button className="book-btn">Book Schedule</button>

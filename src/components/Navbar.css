@@ -1,15 +1,16 @@
 .navbar {
-  position: fixed;
+  position: fixed !important;
   top: 0;
   left: 0;
   width: 100%;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 60px;
+  height: 80px;         
+  background-color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  z-index: 9999; 
+  z-index: 9999;
+  display: flex;        
+  align-items: center;  
+  justify-content: space-between;
+  padding: 0 40px;
 }
 
 

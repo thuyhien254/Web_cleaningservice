@@ -1,15 +1,20 @@
-import React from "react";
-import Navbar from "./components/Navbar";
-import HeroSection from "./components/HeroSection";
-import ServicesSection from "./components/ServicesSection";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "../src/components/Layout";
+import Homepage from "../src/Pages/Homepage";
+import HouseCleaningPage from "../src/Pages/HouseCleaning";
+import HouseMovingPage from "../src/Pages/HouseMoving";
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <HeroSection />
-      <ServicesSection />
-    </div>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/house-cleaning" element={<HouseCleaning />} />
+          <Route path="/house-moving" element={<HouseMoving />} />
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 
