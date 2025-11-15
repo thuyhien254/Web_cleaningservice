@@ -1,23 +1,37 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "../src/components/Layout";
-import ScrollToTop from "./components/Scrolltop";
+import Nolayout from "../src/components/Nolayout";
+
+import Scrolltop from "../src/components/Scrolltop";
 import Homepage from "../src/Pages/Homepage/Homepage";
-import HouseCleaning from "../src/Pages/HouseCleaningpage/HouseCleaning";
-import HouseMoving from "../src/Pages/HouseMovingpage/HouseMoving";
+import HouseCleaningpage from "../src/Pages/HouseCleaningpage/HouseCleaning";
+import HouseMovingpage from "../src/Pages/HouseMovingpage/HouseMoving";
+
+import Loginpage from "./Pages/Login/Loginpage";
+import Registerpage from "../src/Pages/Registerpage";
+
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Layout>
-        <Routes>
+   <Router>
+          <Scrolltop />
+      <Routes>
+        
+        {/* Trang dùng Navbar + Footer */}
+        <Route element={<Layout />}>
           <Route path="/" element={<Homepage />} />
-          <Route path="/house-cleaning" element={<HouseCleaning />} />
-          <Route path="/house-moving" element={<HouseMoving />} />
-        </Routes>
-      </Layout>
+          <Route path="/house-cleaning" element={<HouseCleaningpage />} />
+          <Route path="/house-moving" element={<HouseMovingpage />} />
+        </Route>
+
+        {/* Trang KHÔNG có Navbar/Footer */}
+        <Route element={<Nolayout />}>
+          <Route path="/login" element={<Loginpage />} />
+          <Route path="/signup" element={<Registerpage />} />
+        </Route>
+
+      </Routes>
     </Router>
   );
 }
-
 export default App;
