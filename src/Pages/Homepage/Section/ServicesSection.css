@@ -41,6 +41,7 @@
   display: flex;
   gap: 40px;
   justify-content: center;
+  flex-wrap: wrap; 
 }
 
 .service-card {
@@ -76,18 +77,19 @@
   line-height: 1.6;
 }
 
-.read-more {
-  margin-top: 16px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.readmore-btn {
+  display: inline-block;
+  margin-top: 10px;
   padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
+  border-radius: 8px;
   font-weight: 500;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  text-decoration: none;
+  transition: background 0.25s ease;
 }
 
-.read-more:hover {
+.readmore-btn:hover {
   background: #005ecb;
+  color: #fff;
 }

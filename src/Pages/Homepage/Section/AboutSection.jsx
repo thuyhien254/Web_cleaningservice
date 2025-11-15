@@ -1,6 +1,5 @@
-import React from "react";
-import "./AboutSection.css";
-import aboutImg from "../assets/about-img.png";
+import "../Section/AboutSection.css";
+import aboutImg from "../../../assets/about-img.png";
 
 const AboutSection = () => {
   return (

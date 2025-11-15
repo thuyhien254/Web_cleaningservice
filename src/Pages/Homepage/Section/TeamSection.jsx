@@ -1,9 +1,9 @@
 import React from "react";
-import "./TeamSection.css";
-import lanAnh from "../assets/team-lan-anh.png";
-import kimOanh from "../assets/team-kim-oanh.jpg";
-import quangAnh from "../assets/team-quang-anh.png";
-import baHoang from "../assets/team-ba-hoang.png";
+import "../Section/TeamSection.css";
+import lanAnh from "../../../assets/team-lan-anh.png";
+import kimOanh from "../../../assets/team-kim-oanh.jpg";
+import quangAnh from "../../../assets/team-quang-anh.png";
+import baHoang from "../../../assets/team-ba-hoang.png";
 
 const TeamSection = () => {
   const team = [

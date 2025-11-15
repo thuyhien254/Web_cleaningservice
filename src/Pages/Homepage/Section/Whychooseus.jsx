@@ -1,6 +1,6 @@
 import React from "react";
-import "./Whychooseus.css";
-import teamImg from "../assets/team-group.png";
+import "../Section/Whychooseus.css";
+import teamImg from "../../../assets/team-group.png";
 
 const WhyChooseUs = () => {
   return (

@@ -1,16 +1,30 @@
-html, body, #root, .App {
-  height: auto;
-  overflow: visible;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: "Poppins", sans-serif;
   background-color: #f9fcff;
 }
 
-body {
-  padding-top: 80px; 
+#root {
+  width: 100%;
+  position: relative;
 }
 
-html {
-  overflow-y: auto;
+body {
+  padding-top: 80px;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }

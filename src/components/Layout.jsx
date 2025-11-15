@@ -1,14 +1,18 @@
-import React from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import "../components/Layout.css"; 
 
 const Layout = ({ children }) => {
   return (
-    <>
+    <div className="layout-wrapper">
       <Navbar />
-      <main>{children}</main>
+
+      <main className="layout-content">
+        {children}
+      </main>
+
       <Footer />
-    </>
+    </div>
   );
 };
 

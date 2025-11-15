@@ -1,7 +1,8 @@
 import React from "react";
-import "./ServicesSection.css";
-import cleaningImg from "../assets/house-cleaning.png";
-import movingImg from "../assets/house-moving.png";
+import { Link } from "react-router-dom";  
+import "../Section/ServicesSection.css";
+import cleaningImg from "../../../assets/house-cleaning.png";
+import movingImg from "../../../assets/house-moving.png";
 
 const ServicesSection = () => {
   return (
@@ -28,7 +29,9 @@ const ServicesSection = () => {
             We provide flexible cleaning plans to keep your home spotless.
             Regular or one-time — your choice!
           </p>
-          <button className="read-more">Read more →</button>
+           <Link to="/house-cleaning" className="readmore-btn">
+            Read more →
+          </Link>
         </div>
 
         <div className="service-card">
@@ -38,7 +41,9 @@ const ServicesSection = () => {
             Our moving experts make relocating your home stress-free — from
             packing to transportation.
           </p>
-          <button className="read-more">Read more →</button>
+          <Link to="/house-moving" className="readmore-btn">
+            Read more →
+          </Link>
         </div>
       </div>
     </section>

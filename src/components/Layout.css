@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  font-family: "Poppins", sans-serif;
+  background-color: #f9fcff;
+}
+
+.layout-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+img, video, svg {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+section {
+  width: 100%;
+  overflow: hidden;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}

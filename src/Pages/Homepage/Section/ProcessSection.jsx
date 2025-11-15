@@ -1,9 +1,8 @@
-import React from "react";
-import "./ProcessSection.css";
-import calendarImg from "../assets/process-calendar.png";
-import cleaningImg from "../assets/process-cleaning.png";
-import paymentImg from "../assets/process-payment.png";
-import arrowImg from "../assets/arrow-right.png";
+import "../Section/ProcessSection.css";
+import calendarImg from "../../../assets/process-calendar.png";
+import cleaningImg from "../../../assets/process-cleaning.png";
+import paymentImg from "../../../assets/process-payment.png";
+import arrowImg from "../../../assets/arrow-right.png";
 
 const ProcessSection = () => {
   return (
@@ -11,16 +10,15 @@ const ProcessSection = () => {
       <h2 className="process-title">Our Process</h2>
 
       <div className="process-steps">
+
         {/* Step 1 */}
         <div className="process-step">
           <div className="icon-wrapper">
             <img src={calendarImg} alt="Appointment" className="process-icon" />
-            <span className="step-badge">1</span>
           </div>
           <h3>Make an Appointment</h3>
           <p>
-            Leave a solicitation on the site and get a 7% rebate on the primary
-            request
+            Leave a solicitation on the site and get a 7% rebate on the primary request
           </p>
         </div>
 
@@ -30,12 +28,10 @@ const ProcessSection = () => {
         <div className="process-step">
           <div className="icon-wrapper">
             <img src={cleaningImg} alt="Working Process" className="process-icon" />
-            <span className="step-badge">2</span>
           </div>
           <h3>Working Process</h3>
           <p>
-            At a helpful time for you, the cleaners will come to you and lead
-            cleaning of the premises
+            At a helpful time for you, the cleaners will come to you and lead cleaning of the premises
           </p>
         </div>
 
@@ -43,13 +39,15 @@ const ProcessSection = () => {
 
         {/* Step 3 */}
         <div className="process-step">
+          <div className="icon-wrapper">
             <img src={paymentImg} alt="Payment" className="process-icon" />
-            <span className="step-badge">3</span>
+          </div>
           <h3>Payment Process</h3>
           <p>
             After you ensure that everything is finished by your desires
           </p>
         </div>
+
       </div>
 
       <button className="process-btn">Book In 1 Minute</button>
