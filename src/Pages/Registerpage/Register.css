@@ -5,7 +5,7 @@
   justify-content: flex-start;
   align-items: center;
   padding: 0 60px;
-  overflow: hidden;
+  overflow: hidden; 
 }
 
 .left-sections {
@@ -59,8 +59,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  max-height: 85vh;
+
   overflow-y: auto;
+  overflow-x: hidden !important;
+
+  max-height: 85vh;
 }
 
 .signup-boxs h2 {
@@ -120,11 +123,11 @@
 }
 
 .login-text {
-  text-align: center; 
+  text-align: center;
   margin-top: 8px;
   width: 100%;
-  display: block; 
-  margin-bottom: 15px; 
+  display: block;
+  margin-bottom: 0px;
   font-size: 16px;
   grid-column: span 2;
 }
@@ -134,6 +137,7 @@
   text-align: left;
   text-decoration: underline;
   display: block;
+  margin-top: -20px;
 }
 
 .signup-footer {
@@ -145,15 +149,27 @@
 
 .back-home:hover {
   text-decoration: none;
-  color: #166fcc; 
+  color: #166fcc;
 }
+
 .signup-message {
   grid-column: span 2;
   text-align: center;
   margin-bottom: 10px;
   font-size: 14px;
-  color: green; 
+  color: green;
 }
+
+.error,
 .signup-error {
+  grid-column: span 2;
   color: red;
+  background-color: #ffe6e6;
+  border: 1px solid #dd9999;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+
+  word-break: break-word;
+  overflow-x: hidden !important;
 }

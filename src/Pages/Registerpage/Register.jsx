@@ -34,7 +34,6 @@ const SignUpPage = () => {
     setError("");
     setSuccess("");
 
-    // Validation cơ bản
     if (!formData.agree) {
       setError("You must agree to the terms and conditions");
       return;
@@ -58,13 +57,12 @@ const SignUpPage = () => {
         throw new Error("Signup failed");
       }
 
-      await response.json(); 
-    setSuccess("Sign up successful! Redirecting to login...");
-      
+      await response.json();
+      setSuccess("Sign up successful! Redirecting to login...");
+
       setTimeout(() => {
         navigate("/login");
       }, 1500);
-
     } catch (err) {
       console.error(err);
       setError(err.message || "Something went wrong");
@@ -86,9 +84,7 @@ const SignUpPage = () => {
         <form className="signup-boxs" onSubmit={handleSubmit}>
           <h2>Sign Up</h2>
 
-          {error && <p className="error">{error}</p>}
-          {success && <p className="success">{success}</p>}
-
+          
           <div className="input-groups">
             <label>Customer Name</label>
             <input
@@ -185,6 +181,9 @@ const SignUpPage = () => {
             />
             <span>I agree to the terms and conditions</span>
           </div>
+
+          {error && <p className="error">{error}</p>}
+          {success && <p className="success">{success}</p>}
 
           <button className="signup-btns" type="submit" disabled={loading}>
             {loading ? "Signing up..." : "Sign Up"}
