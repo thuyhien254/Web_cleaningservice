@@ -52,7 +52,6 @@
   line-height: 1.5;
 }
 
-/* Right Image */
 .why-image-wrapper {
   position: relative;
   flex: 1;
@@ -67,19 +66,3 @@
   object-fit: cover;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .why-container {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .why-grid {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .why-desc {
-    margin: 0 auto 40px;
-  }
-}

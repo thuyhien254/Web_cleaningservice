@@ -99,22 +99,4 @@
   color: #777;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .footer {
-    padding: 50px 40px 20px;
-  }
 
-  .footer-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .footer-col {
-    width: 100%;
-  }
-
-  .footer-bottom {
-    text-align: center;
-  }
-}

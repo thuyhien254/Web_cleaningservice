@@ -1,4 +1,3 @@
-import React from "react";
 import "../Section/Bookclean.css";
 import bookingImg from "../../../assets/booking.jpg"; 
 

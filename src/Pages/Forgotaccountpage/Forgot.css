@@ -1,4 +1,4 @@
-.login-page {
+.forgot-page {
   display: flex;
   height: 100vh;
   background: linear-gradient(to bottom right, #d7e8ff, #ffffff);
@@ -11,13 +11,13 @@
 .left-sections {
   position: fixed;
   top: 50%;
-  left: 0;
+  left: 50px;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px;
-  background-color: white;
+  background-color: transparent;
+  box-shadow: none;
   z-index: 10;
 }
 
@@ -47,7 +47,7 @@
   width: 100%;
 }
 
-.login-box {
+.forgot-box {
   width: 100%;
   max-width: 500px;
   background: #ffffff;
@@ -57,16 +57,16 @@
   text-align: left;
 }
 
-.login-box h2 {
+.forgot-box h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.error {
-  color: red;
+.info-text {
   text-align: center;
-  margin-bottom: 12px;
-  font-weight: 500;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #555;
 }
 
 .input-group {
@@ -84,34 +84,9 @@
   padding: 12px;
   border: 1px solid #bfbfbf;
   border-radius: 6px;
-  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.input-group input:focus {
-  border-color: #1e88e5;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
-}
-
-.remember-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-.remember-row input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
-
-.remember-row span {
-  font-size: 14px;
-  color: #333;
-}
-
-.login-btn {
+.submit-btn {
   width: 100%;
   padding: 12px;
   border: none;
@@ -119,43 +94,53 @@
   color: #fff;
   border-radius: 6px;
   cursor: pointer;
-  margin-bottom: 10px;
   font-size: 15px;
-  transition: background 0.3s, box-shadow 0.2s;
+  margin-top: 10px;
+  transition: background 0.3s ease;
 }
 
-.login-btn:hover {
+.submit-btn:hover {
   background: #166fcc;
 }
 
-.login-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.3);
+.success {
+  color: #2e7d32;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-.link,
-.back-home {
-  color: #1e88e5;
+.error {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.back-login {
+  text-align: center;
+  margin-top: 15px;
   font-size: 16px;
+}
+
+.back-login a {
+  color: #1e88e5;
   text-decoration: none;
 }
 
-.link {
-  text-align: center;
-  display: block;
-  margin-top: 6px;
-}
-
-.signup-text {
-  text-align: center;
-  font-size: 16px;
-  margin-top: 15px;
+.back-login a:hover {
+  text-decoration: underline;
 }
 
 .back-home {
-  margin-top: 30px;
+  display: block;
+  margin-top: 20px;
   font-size: 14px;
   text-decoration: underline;
-  text-align: left;
+  color: #1e88e5;
 }
 
+.back-home:hover {
+  color: #166fcc;
+  text-decoration: none;
+}
