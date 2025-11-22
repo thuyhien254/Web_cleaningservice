@@ -23,7 +23,7 @@ const Loginpage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); 
+    setError("");
 
     try {
       const response = await fetch("http://localhost:5000/api/login", {
@@ -36,7 +36,7 @@ const Loginpage = () => {
 
       if (response.ok) {
         console.log("Login success:", data);
-        navigate("/"); 
+        navigate("/");
       } else {
         setError(data.message || "Login failed");
       }
@@ -48,16 +48,24 @@ const Loginpage = () => {
 
   return (
     <div className="login-page">
-      <div className="left-sections">
-        <div className="logo-wrapper">
-          <img src={logonoword} className="logo-img" alt="logo" />
-          <h1 className="brands">HappyHome</h1>
+      {/* Container chính tạo hiệu ứng khung Card bo tròn */}
+      <div className="login-container">
+        
+        {/* Phần bên trái: Thương hiệu (Màu xanh) */}
+        <div className="brand-section">
+          <div className="logo-wrapper">
+            <img src={logonoword} className="logo-img" alt="logo" />
+          </div>
+          <h1>HappyHome</h1>
+          <p>Dịch vụ vệ sinh & Chăm sóc nhà cửa hàng đầu.</p>
         </div>
-      </div>
 
-      <div className="right-section">
-        <div className="login-box">
-          <h2>Login</h2>
+        {/* Phần bên phải: Form đăng nhập (Màu trắng) */}
+        <div className="form-section">
+          <div className="form-header">
+            <h2>Login</h2>
+            <p>Welcome back! Please login to your account.</p>
+          </div>
 
           {error && <p className="error">{error}</p>}
 
@@ -90,28 +98,29 @@ const Loginpage = () => {
               <input
                 type="checkbox"
                 name="remember"
+                id="remember"
                 checked={formData.remember}
                 onChange={handleChange}
               />
-              <span>Remember me</span>
+              <label htmlFor="remember">Remember me</label>
             </div>
 
             <button type="submit" className="login-btn">
               Login
             </button>
+
+            <div className="login-link">
+              <Link to="/forgot-password">Forgot password?</Link>
+            </div>
+
+            <div className="login-link">
+              Don't have an account? <Link to="/signup">Sign up</Link>
+            </div>
+            
+            <div className="back-link">
+               <Link to="/">← Back to HappyHome</Link>
+            </div>
           </form>
-
-          <Link className="link" to="/forgot-password">
-            Forgot account?
-          </Link>
-
-          <p className="signup-text">
-            Don't have an account? <Link to="/signup">Sign up</Link>
-          </p>
-
-          <Link className="back-home" to="/">
-            ← Back to HappyHome
-          </Link>
         </div>
       </div>
     </div>
