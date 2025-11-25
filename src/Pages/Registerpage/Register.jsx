@@ -5,15 +5,12 @@ import logonoword from "../../assets/logonoword.png";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    name: "",
-    dob: "",
-    personalId: "",
-    email: "",
-    username: "",
-    password: "",
+    full_name: "",
     phone: "",
-    address: "",
+    email: "",
+    password: "",
     agree: false,
   });
 
@@ -39,7 +36,7 @@ const SignUpPage = () => {
       return;
     }
 
-    if (!formData.name || !formData.username || !formData.password) {
+    if (!formData.full_name || !formData.email || !formData.password || !formData.phone) {
       setError("Please fill in all required fields");
       return;
     }
@@ -47,24 +44,22 @@ const SignUpPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/signup", {
+      const response = await fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Signup failed");
+        throw new Error(data.message || "Signup failed");
       }
 
-      await response.json();
       setSuccess("Sign up successful! Redirecting to login...");
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
-      console.error(err);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -72,131 +67,98 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="signup-pages">
-      <div className="left-sections">
-        <div className="logo-wrappers">
-          <img src={logonoword} className="logo-imgs" alt="logo" />
-          <h1 className="brands">HappyHome</h1>
+    <div className="auth-page">
+      <div className="auth-container">
+
+        {/* LEFT */}
+        <div className="brand-section">
+          <div className="logo-wrapper">
+            <img src={logonoword} className="logo-img" alt="logo" />
+          </div>
+          <h1>HappyHome</h1>
+          <p>Dịch vụ vệ sinh & chăm sóc nhà cửa hàng đầu.</p>
         </div>
-      </div>
 
-      <div className="right-sections">
-        <form className="signup-boxs" onSubmit={handleSubmit}>
-          <h2>Sign Up</h2>
-
-          
-          <div className="input-groups">
-            <label>Customer Name</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={handleChange}
-            />
+        {/* RIGHT */}
+        <div className="form-section">
+          <div className="form-header">
+            <h2>Create Account</h2>
+            <p>Enter your details to register.</p>
           </div>
 
-          <div className="input-groups">
-            <label>Date of Birth</label>
-            <input
-              type="date"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-            />
-          </div>
+          <form className="form-grid" onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                name="full_name"
+                placeholder="Nguyen Van A"
+                value={formData.full_name}
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className="input-groups">
-            <label>Personal ID</label>
-            <input
-              type="text"
-              name="personalId"
-              placeholder="Enter your personal ID"
-              value={formData.personalId}
-              onChange={handleChange}
-            />
-          </div>
+            <div className="input-group">
+              <label>Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="090 123 4567"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className="input-groups">
-            <label>Email Address</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
+            <div className="input-group full-width">
+              <label>Email Address</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="name@example.com"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className="input-groups">
-            <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Choose a username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-          </div>
+            <div className="input-group full-width">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Min 6 characters"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className="input-groups">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-          </div>
+            <div className="checkbox-group full-width">
+              <input
+                type="checkbox"
+                name="agree"
+                id="agree"
+                checked={formData.agree}
+                onChange={handleChange}
+              />
+              <label htmlFor="agree">I agree to the terms and conditions</label>
+            </div>
 
-          <div className="input-groups">
-            <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Enter your phone number"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </div>
+            {error && <p className="error full-width">{error}</p>}
+            {success && <p className="success full-width">{success}</p>}
 
-          <div className="input-groups">
-            <label>Home Address</label>
-            <input
-              type="text"
-              name="address"
-              placeholder="Enter your home address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
+            <button className="primary-btn full-width" type="submit" disabled={loading}>
+              {loading ? "Signing up..." : "Sign Up Now"}
+            </button>
 
-          <div className="remember-rows">
-            <input
-              type="checkbox"
-              name="agree"
-              checked={formData.agree}
-              onChange={handleChange}
-            />
-            <span>I agree to the terms and conditions</span>
-          </div>
+            <p className="bottom-text full-width">
+              Already have an account? <Link to="/login">Log in</Link>
+            </p>
 
-          {error && <p className="error">{error}</p>}
-          {success && <p className="success">{success}</p>}
+            <p className="back-link full-width">
+              <Link to="/">← Back to HappyHome</Link>
+            </p>
+          </form>
+        </div>
 
-          <button className="signup-btns" type="submit" disabled={loading}>
-            {loading ? "Signing up..." : "Sign Up"}
-          </button>
-
-          <p className="login-text">
-            Already have an account? <Link to="/login">Log in</Link>
-          </p>
-
-          <Link className="back-home" to="/">
-            ← Back to HappyHome
-          </Link>
-        </form>
       </div>
     </div>
   );
