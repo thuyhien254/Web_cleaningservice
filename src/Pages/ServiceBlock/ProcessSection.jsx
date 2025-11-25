@@ -29,9 +29,10 @@ const ProcessSection = ({ data }) => {
                 <h3 className="step-title">{step.step_title}</h3>
 
                 {activeIndex === index && (
-                  <ul className="step-details">
-                    <li>{step.description}</li>
-                  </ul>
+                  <div 
+                    className="step-details-html"
+                    dangerouslySetInnerHTML={{ __html: step.description }}
+                  />
                 )}
               </div>
             </div>

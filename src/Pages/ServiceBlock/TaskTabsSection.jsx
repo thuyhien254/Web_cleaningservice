@@ -27,17 +27,18 @@ const TaskTabsSection = ({ data }) => {
         </div>
 
         {tabs.length > 0 && (
-          <div className="tab-content">
-            <img
-              src={tabs[activeIndex].image_url}
-              alt={tabs[activeIndex].tab_title}
-            />
-
-            <ul>
-              <li>{tabs[activeIndex].description}</li>
-            </ul>
-          </div>
-        )}
+        <div className="tab-content">
+          <img
+            src={tabs[activeIndex].image_url}
+            alt={tabs[activeIndex].tab_title}
+          />
+          <div 
+            className="tab-description-html"
+            dangerouslySetInnerHTML={{ __html: tabs[activeIndex].description }}
+          />
+          
+        </div>
+      )}
 
       </div>
     </section>

@@ -26,3 +26,14 @@
 
   transition: background-image 0.3s ease-in-out;
 }
+
+/* Trong file css của bạn */
+.html-content ul {
+  list-style-type: disc; /* Hiện dấu chấm tròn */
+  padding-left: 20px;    /* Thụt đầu dòng */
+  margin-top: 10px;
+}
+
+.html-content li {
+  margin-bottom: 5px;
+}
