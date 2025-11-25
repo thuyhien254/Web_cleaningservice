@@ -2,6 +2,7 @@
   max-width: 1100px;
   margin: 60px auto;
   padding: 20px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,22 +10,26 @@
 }
 
 .bookclean-left h2 {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
   line-height: 1.4;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
+  color: #000;
 }
 
 .bookclean-btn {
   background: #007bff;
   border: none;
   color: white;
-  padding: 12px 28px;
+
+  padding: 14px 32px;
   border-radius: 6px;
-  font-size: 15px;
+
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.25s ease;
+
+  transition: background 0.25s ease;
 }
 
 .bookclean-btn:hover {
@@ -33,6 +38,8 @@
 
 .bookclean-right img {
   width: 420px;
-  border-radius: 8px;
-  object-fit: cover;
+  height: 300px;        
+  border-radius: 10px;
+  object-fit: cover; 
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
 }

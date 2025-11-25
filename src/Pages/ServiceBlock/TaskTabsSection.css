@@ -1,7 +1,16 @@
+.task-tabs-wrapper {
+  background: #dceeff;
+  padding-top: 50px;
+  padding-bottom: 60px;
+}
+
 .task-tabs {
+  background: white;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 50px 20px;
+  padding: 25px 20px 40px 20px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
 }
 
 .task-title {
@@ -47,32 +56,28 @@
   display: flex;
   gap: 40px;
   margin-top: 20px;
-  min-height: 350px; 
+  min-height: 300px; 
 }
 
 .tab-content img {
   width: 45%;
   border-radius: 12px;
-  height: 350px;        
-  object-fit: cover; 
+  height: 300px; 
+  object-fit: cover;
 }
 
 .tab-content ul {
   flex: 1;
-  line-height: 1.8;
   font-size: 17px;
-}
-.task-tabs-wrapper {
-  background: #dceeff;
-  padding-top: 50px;
-  padding-bottom: 60px;
+  color: #444;
+  padding: 0;
+  margin: 0;
 }
 
-.task-tabs {
-  background: white;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 25px 20px 40px 20px;
-  border: 2px solid #007bff;
-  border-radius: 8px;
+.tab-content ul li {
+  list-style: none; 
+  line-height: 1.6;
+  font-size: 17px;
+  margin: 0;
+  padding: 0;
 }

@@ -15,7 +15,7 @@
   display: flex;
   gap: 40px;
   max-width: 1200px;
-  margin: 60px auto;
+  margin: 50px auto;
   padding: 0 20px;
 }
 
@@ -24,9 +24,9 @@
 }
 
 .moving-steps-right {
-  width: 500px;           
-  height: 350px;        
-  overflow: hidden;     
+  width: 500px;
+  height: 350px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,7 +35,8 @@
 .moving-steps-right img {
   width: 100%;
   height: 100%;
-  object-fit: cover;      
+  object-fit: cover;
+  border-radius: 8px;
   transition: opacity 0.25s ease-in-out;
 }
 
@@ -61,8 +62,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 4px;
+  transition: background 0.3s;
 }
 
 .step-block.active .step-number {
@@ -73,6 +75,7 @@
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 6px;
+  color: #000;
 }
 
 .step-details {
@@ -83,4 +86,9 @@
 
 .step-details li {
   margin-bottom: 8px;
+  font-size: 16px;
+  color: #444;
+  list-style: disc;
 }
+
+

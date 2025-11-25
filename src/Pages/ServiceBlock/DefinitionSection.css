@@ -1,4 +1,5 @@
 .defc-section {
+  width: 100%;
   max-width: 1050px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -8,12 +9,15 @@
   font-size: 36px;
   font-weight: 700;
   text-align: left;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
+  color: #000;
 }
 
 .defc-content p {
   font-size: 16px;
   line-height: 1.7;
   color: #333;
-  margin-bottom: 22px;
+  margin-bottom: 0; 
+  white-space: pre-line; 
+  text-align: left;
 }

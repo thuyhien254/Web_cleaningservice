@@ -7,13 +7,22 @@ import { FaUserCircle } from "react-icons/fa";
 const Navbar = () => {
   const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-
   const [userName, setUserName] = useState(null);
+
+  const [services, setServices] = useState([]);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ===== LOAD USER NAME =====
+  useEffect(() => {
+    fetch("/api/services")
+      .then(res => res.json())
+      .then(data => {
+        setServices(data.data.services || []);
+      })
+      .catch(err => console.error("Failed to load services", err));
+  }, []);
+
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
 
@@ -21,17 +30,14 @@ const Navbar = () => {
       try {
         const parsed = JSON.parse(savedUser);
         if (parsed.full_name) {
-          const nameParts = parsed.full_name.trim().split(" ");
-          const lastTwo = nameParts.slice(-2).join(" ");
+          const parts = parsed.full_name.trim().split(" ");
+          const lastTwo = parts.slice(-2).join(" ");
           setUserName(lastTwo);
         }
-      } catch {
-        console.error("Invalid user data in localStorage");
-      }
+      } catch {}
     }
   }, []);
 
-  // ===== LOGOUT =====
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -42,9 +48,7 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  const serviceActive =
-    location.pathname.startsWith("/house-cleaning") ||
-    location.pathname.startsWith("/house-moving");
+  const serviceActive = location.pathname.startsWith("/services/");
 
   const toggleServiceDropdown = () => {
     setIsServiceDropdownOpen(!isServiceDropdownOpen);
@@ -58,13 +62,11 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      {/* LEFT LOGO */}
       <div className="nav-logo">
         <img src={logonoword} alt="HappyHome Logo" />
         <span className="brand-name">HappyHome</span>
       </div>
 
-      {/* CENTER LINKS */}
       <ul className="nav-links">
         <li>
           <Link to="/" className={isActive("/") ? "active-link" : ""}>
@@ -82,23 +84,16 @@ const Navbar = () => {
 
           {isServiceDropdownOpen && (
             <ul className="dropdown-menu">
-              <li>
-                <Link
-                  to="/house-cleaning"
-                  onClick={() => setIsServiceDropdownOpen(false)}
-                >
-                  House Cleaning
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/house-moving"
-                  onClick={() => setIsServiceDropdownOpen(false)}
-                >
-                  House Moving
-                </Link>
-              </li>
+              {services.map((svc) => (
+                <li key={svc.id}>
+                  <Link
+                    to={`/services/${svc.slug || svc.id}`}
+                    onClick={() => setIsServiceDropdownOpen(false)}
+                  >
+                    {svc.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           )}
         </li>
@@ -113,20 +108,17 @@ const Navbar = () => {
         </li>
       </ul>
 
-      {/* RIGHT SIDE */}
       <div className="nav-right">
         <Link to="/booking">
           <button className="book-btn">Book Schedule</button>
         </Link>
 
-        {/* USER DROPDOWN */}
         <div className="dropdown user-dropdown-wrapper">
           <div className="user-display" onClick={toggleUserDropdown}>
             <FaUserCircle size={26} />
             {userName && <span className="user-short-name">{userName}</span>}
           </div>
 
-          {/* When logged in */}
           {isUserDropdownOpen && userName && (
             <ul className="dropdown-menu user-dropdown-menu">
               <li>
@@ -137,22 +129,13 @@ const Navbar = () => {
             </ul>
           )}
 
-          {/* When NOT logged in */}
           {isUserDropdownOpen && !userName && (
             <ul className="dropdown-menu user-dropdown-menu">
               <li>
-                <Link to="/login" onClick={() => setIsUserDropdownOpen(false)}>
-                  Sign In
-                </Link>
+                <Link to="/login">Sign In</Link>
               </li>
-
               <li>
-                <Link
-                  to="/signup"
-                  onClick={() => setIsUserDropdownOpen(false)}
-                >
-                  Sign Up
-                </Link>
+                <Link to="/signup">Sign Up</Link>
               </li>
             </ul>
           )}

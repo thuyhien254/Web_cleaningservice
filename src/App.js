@@ -4,13 +4,16 @@ import Nolayout from "../src/components/Nolayout";
 
 import Scrolltop from "../src/components/Scrolltop";
 import Homepage from "../src/Pages/Homepage/Homepage";
-import HouseCleaningpage from "../src/Pages/HouseCleaningpage/HouseCleaning";
-import HouseMovingpage from "../src/Pages/HouseMovingpage/HouseMoving";
-import Bookingpage from "../src/Pages/Bookingpage/Booking";
+
+// NEW — dynamic service page
+import ServicePage from "../src/Pages/Servicepage/Servicepage.jsx";
 
 import Loginpage from "./Pages/Login/Loginpage";
 import Registerpage from "../src/Pages/Registerpage/Register";
 import Forgot from "../src/Pages/Forgotaccountpage/Forgot";
+
+// GIỮ booking
+import Bookingpage from "../src/Pages/Bookingpage/Booking";
 
 import AdminPage from "../src/Pages/Adminpage/Dashboard.jsx";
 import RequireAdmin from "./components/RequireAdmin.jsx";
@@ -18,26 +21,28 @@ import RequireAdmin from "./components/RequireAdmin.jsx";
 function App() {
   return (
     <Router>
-      {/* ScrollToTop phải NẰM TRONG Router */}
       <Scrolltop />
 
       <Routes>
-        {/* Trang có Navbar/Footer */}
+        {/* Layout chuẩn có Navbar/Footer */}
         <Route element={<Layout />}>
           <Route path="/" element={<Homepage />} />
-          <Route path="/house-cleaning" element={<HouseCleaningpage />} />
-          <Route path="/house-moving" element={<HouseMovingpage />} />
+
+          {/* Dynamic service page */}
+          <Route path="/services/:id" element={<ServicePage />} />
+
+          {/* KEEP: booking page là trang riêng */}
           <Route path="/booking" element={<Bookingpage />} />
         </Route>
 
-        {/* Trang không có layout */}
+        {/* NoLayout: login/signup */}
         <Route element={<Nolayout />}>
           <Route path="/login" element={<Loginpage />} />
           <Route path="/signup" element={<Registerpage />} />
           <Route path="/forgot-password" element={<Forgot />} />
         </Route>
 
-        {/* ADMIN — BẮT BUỘC PHẢI LOGIN ADMIN */}
+        {/* Admin */}
         <Route
           path="/admin"
           element={
