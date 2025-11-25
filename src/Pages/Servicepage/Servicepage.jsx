@@ -7,7 +7,7 @@ const ServicePage = () => {
   const [service, setService] = useState(null);
 
   useEffect(() => {
-    fetch(`/api/services/${id}`)
+    fetch(`http://localhost:3000/api/services/${id}`)
       .then((res) => res.json())
       .then((data) => setService(data.data.service))
       .catch(console.error);

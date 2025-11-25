@@ -7,22 +7,24 @@ import { FaUserCircle } from "react-icons/fa";
 const Navbar = () => {
   const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [userName, setUserName] = useState(null);
 
+  const [userName, setUserName] = useState(null);
   const [services, setServices] = useState([]);
 
   const location = useLocation();
   const navigate = useNavigate();
 
+  // ===== FETCH SERVICES FOR NAVBAR =====
   useEffect(() => {
-    fetch("/api/services")
-      .then(res => res.json())
-      .then(data => {
-        setServices(data.data.services || []);
+    fetch("http://localhost:3000/api/services")
+      .then((res) => res.json())
+      .then((data) => {
+        setServices(data?.data?.services || []);
       })
-      .catch(err => console.error("Failed to load services", err));
+      .catch(() => console.error("Failed to load services"));
   }, []);
 
+  // ===== LOAD USER NAME FROM LOCALSTORAGE =====
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
 
@@ -34,10 +36,13 @@ const Navbar = () => {
           const lastTwo = parts.slice(-2).join(" ");
           setUserName(lastTwo);
         }
-      } catch {}
+      } catch {
+        console.error("Invalid user JSON");
+      }
     }
   }, []);
 
+  // ===== LOGOUT =====
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -46,10 +51,11 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  // ===== ACTIVE LINK HELPERS =====
   const isActive = (path) => location.pathname === path;
-
   const serviceActive = location.pathname.startsWith("/services/");
 
+  // ===== DROPDOWN HANDLERS =====
   const toggleServiceDropdown = () => {
     setIsServiceDropdownOpen(!isServiceDropdownOpen);
     setIsUserDropdownOpen(false);
@@ -62,11 +68,13 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
+      {/* LEFT LOGO */}
       <div className="nav-logo">
         <img src={logonoword} alt="HappyHome Logo" />
         <span className="brand-name">HappyHome</span>
       </div>
 
+      {/* CENTER NAV LINKS */}
       <ul className="nav-links">
         <li>
           <Link to="/" className={isActive("/") ? "active-link" : ""}>
@@ -74,6 +82,7 @@ const Navbar = () => {
           </Link>
         </li>
 
+        {/* SERVICES DROPDOWN */}
         <li className="dropdown">
           <span
             className={`dropdown-toggle ${serviceActive ? "active-link" : ""}`}
@@ -87,7 +96,7 @@ const Navbar = () => {
               {services.map((svc) => (
                 <li key={svc.id}>
                   <Link
-                    to={`/services/${svc.slug || svc.id}`}
+                    to={`/services/${svc.id}`}  // BE only has id
                     onClick={() => setIsServiceDropdownOpen(false)}
                   >
                     {svc.name}
@@ -119,6 +128,7 @@ const Navbar = () => {
             {userName && <span className="user-short-name">{userName}</span>}
           </div>
 
+          {/* If logged in */}
           {isUserDropdownOpen && userName && (
             <ul className="dropdown-menu user-dropdown-menu">
               <li>
@@ -129,6 +139,7 @@ const Navbar = () => {
             </ul>
           )}
 
+          {/* If NOT logged in */}
           {isUserDropdownOpen && !userName && (
             <ul className="dropdown-menu user-dropdown-menu">
               <li>
