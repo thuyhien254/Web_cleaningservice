@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../Login/Loginpage.css";
 import logonoword from "../../assets/logonoword.png";
 
@@ -12,6 +12,9 @@ const Loginpage = () => {
 
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/";
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -22,40 +25,37 @@ const Loginpage = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  try {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      localStorage.setItem("token", data.data.token);
-      localStorage.setItem("user", JSON.stringify(data.data.user));
+      if (response.ok) {
+        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
 
-      // 👉 KIỂM TRA ROLE ĐỂ ĐIỀU HƯỚNG
-      if (data.data.user.role === "ADMIN") {
-        navigate("/admin");
+        if (data.data.user.role === "ADMIN") {
+          navigate("/admin", { replace: true });
+        } else {
+          navigate(from, { replace: true });
+        }
       } else {
-        navigate("/");
+        setError(data.message || "Login failed");
       }
-
-    } else {
-      setError(data.message || "Login failed");
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
     }
-  } catch (err) {
-    setError("Something went wrong. Please try again.");
-  }
-};
-
+  };
 
   return (
     <div className="auth-page">
@@ -78,7 +78,6 @@ const Loginpage = () => {
           {error && <p className="error">{error}</p>}
 
           <form onSubmit={handleSubmit}>
-            
             <div className="input-group">
               <label>Email</label>
               <input

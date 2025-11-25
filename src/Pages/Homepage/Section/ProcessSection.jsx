@@ -1,4 +1,5 @@
 import "../Section/ProcessSection.css";
+import { Link } from "react-router-dom";
 import calendarImg from "../../../assets/process-calendar.png";
 import cleaningImg from "../../../assets/process-cleaning.png";
 import paymentImg from "../../../assets/process-payment.png";
@@ -50,7 +51,12 @@ const ProcessSection = () => {
 
       </div>
 
-      <button className="process-btn">Book In 1 Minute</button>
+      <Link to="/booking">
+        <button className="process-btn">
+                Book In 1 Minute
+        </button>
+      </Link>
+
     </section>
   );
 };

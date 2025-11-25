@@ -70,7 +70,6 @@ const SignUpPage = () => {
     <div className="auth-page">
       <div className="auth-container">
 
-        {/* LEFT */}
         <div className="brand-section">
           <div className="logo-wrapper">
             <img src={logonoword} className="logo-img" alt="logo" />
@@ -79,7 +78,6 @@ const SignUpPage = () => {
           <p>Dịch vụ vệ sinh & chăm sóc nhà cửa hàng đầu.</p>
         </div>
 
-        {/* RIGHT */}
         <div className="form-section">
           <div className="form-header">
             <h2>Create Account</h2>

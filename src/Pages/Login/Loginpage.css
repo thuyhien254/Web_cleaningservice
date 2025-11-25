@@ -3,11 +3,6 @@
   margin: 0;
   padding: 0;
 }
-
-html {
-  overflow-y: scroll;
-}
-
 .auth-page {
   background-color: #f0f4f8;
   display: flex;

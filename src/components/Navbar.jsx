@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../components/Navbar.css";
 import logonoword from "../assets/logonoword.png";
@@ -7,27 +7,24 @@ import { FaUserCircle } from "react-icons/fa";
 const Navbar = () => {
   const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-
   const [userName, setUserName] = useState(null);
   const [services, setServices] = useState([]);
+
+  const serviceRef = useRef(null);
+  const userRef = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ===== FETCH SERVICES FOR NAVBAR =====
   useEffect(() => {
     fetch("http://localhost:3000/api/services")
       .then((res) => res.json())
-      .then((data) => {
-        setServices(data?.data?.services || []);
-      })
-      .catch(() => console.error("Failed to load services"));
+      .then((data) => setServices(data?.data?.services || []))
+      .catch(() => {});
   }, []);
 
-  // ===== LOAD USER NAME FROM LOCALSTORAGE =====
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-
     if (savedUser) {
       try {
         const parsed = JSON.parse(savedUser);
@@ -36,13 +33,23 @@ const Navbar = () => {
           const lastTwo = parts.slice(-2).join(" ");
           setUserName(lastTwo);
         }
-      } catch {
-        console.error("Invalid user JSON");
-      }
+      } catch {}
     }
   }, []);
 
-  // ===== LOGOUT =====
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (serviceRef.current && !serviceRef.current.contains(e.target)) {
+        setIsServiceDropdownOpen(false);
+      }
+      if (userRef.current && !userRef.current.contains(e.target)) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -51,30 +58,16 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  // ===== ACTIVE LINK HELPERS =====
   const isActive = (path) => location.pathname === path;
   const serviceActive = location.pathname.startsWith("/services/");
 
-  // ===== DROPDOWN HANDLERS =====
-  const toggleServiceDropdown = () => {
-    setIsServiceDropdownOpen(!isServiceDropdownOpen);
-    setIsUserDropdownOpen(false);
-  };
-
-  const toggleUserDropdown = () => {
-    setIsUserDropdownOpen(!isUserDropdownOpen);
-    setIsServiceDropdownOpen(false);
-  };
-
   return (
     <nav className="navbar">
-      {/* LEFT LOGO */}
       <div className="nav-logo">
         <img src={logonoword} alt="HappyHome Logo" />
         <span className="brand-name">HappyHome</span>
       </div>
 
-      {/* CENTER NAV LINKS */}
       <ul className="nav-links">
         <li>
           <Link to="/" className={isActive("/") ? "active-link" : ""}>
@@ -82,11 +75,13 @@ const Navbar = () => {
           </Link>
         </li>
 
-        {/* SERVICES DROPDOWN */}
-        <li className="dropdown">
+        <li className="dropdown" ref={serviceRef}>
           <span
             className={`dropdown-toggle ${serviceActive ? "active-link" : ""}`}
-            onClick={toggleServiceDropdown}
+            onClick={() => {
+              setIsServiceDropdownOpen(!isServiceDropdownOpen);
+              setIsUserDropdownOpen(false);
+            }}
           >
             Services ▾
           </span>
@@ -96,7 +91,7 @@ const Navbar = () => {
               {services.map((svc) => (
                 <li key={svc.id}>
                   <Link
-                    to={`/services/${svc.id}`}  // BE only has id
+                    to={`/services/${svc.id}`}
                     onClick={() => setIsServiceDropdownOpen(false)}
                   >
                     {svc.name}
@@ -122,13 +117,18 @@ const Navbar = () => {
           <button className="book-btn">Book Schedule</button>
         </Link>
 
-        <div className="dropdown user-dropdown-wrapper">
-          <div className="user-display" onClick={toggleUserDropdown}>
+        <div className="dropdown user-dropdown-wrapper" ref={userRef}>
+          <div
+            className="user-display"
+            onClick={() => {
+              setIsUserDropdownOpen(!isUserDropdownOpen);
+              setIsServiceDropdownOpen(false);
+            }}
+          >
             <FaUserCircle size={26} />
             {userName && <span className="user-short-name">{userName}</span>}
           </div>
 
-          {/* If logged in */}
           {isUserDropdownOpen && userName && (
             <ul className="dropdown-menu user-dropdown-menu">
               <li>
@@ -139,7 +139,6 @@ const Navbar = () => {
             </ul>
           )}
 
-          {/* If NOT logged in */}
           {isUserDropdownOpen && !userName && (
             <ul className="dropdown-menu user-dropdown-menu">
               <li>

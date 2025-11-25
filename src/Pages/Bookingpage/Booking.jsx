@@ -1,94 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Bookingpage/Booking.css";
 
 const BookingPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    service: "",
-    date: "",
-    time: "",
-  });
+  const [services, setServices] = useState([]);
+  const [selectedService, setSelectedService] = useState(null);
+  const [fields, setFields] = useState([]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // Fetch danh sách dịch vụ
+  useEffect(() => {
+    fetch("http://localhost:3000/api/services")
+      .then((res) => res.json())
+      .then((data) => {
+        setServices(data.data.services || []);
+      })
+      .catch((err) => console.error("Failed to load services", err));
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Booking Data:", formData);
-    alert("Booking submitted successfully!");
-    setFormData({ name: "", email: "", service: "", date: "", time: "" });
+  const handleServiceChange = (serviceId) => {
+    const svc = services.find((s) => s.id === Number(serviceId));
+    setSelectedService(svc);
+
+    if (svc?.booking_form_config?.fields) {
+      setFields(svc.booking_form_config.fields);
+    } else {
+      setFields([]);
+    }
   };
 
   return (
     <div className="booking-page">
-      <h1>Book Your Service</h1>
-      <form className="booking-form" onSubmit={handleSubmit}>
-        <label>
-          Name
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Your name"
-            required
-          />
-        </label>
+      <h1 className="booking-page-title">Booking Schedule</h1>
 
-        <label>
-          Email
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Your email"
-            required
-          />
-        </label>
+      <select
+        className="service-select"
+        onChange={(e) => handleServiceChange(e.target.value)}
+      >
+        <option value="">-- Select service --</option>
 
-        <label>
-          Service
-          <select
-            name="service"
-            value={formData.service}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select a service</option>
-            <option value="house-cleaning">House Cleaning</option>
-            <option value="house-moving">House Moving</option>
-          </select>
-        </label>
+        {services.map((svc) => (
+          <option key={svc.id} value={svc.id}>
+            {svc.name}
+          </option>
+        ))}
+      </select>
 
-        <label>
-          Date
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            required
-          />
-        </label>
+      {fields.length > 0 && (
+        <form className="booking-form">
+          {fields.map((f) => (
+            <div key={f.key} className="form-group">
+              <label>{f.label}</label>
 
-        <label>
-          Time
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            required
-          />
-        </label>
+              <input
+                type={f.type}
+                name={f.key}
+                required={f.required}
+                placeholder={f.placeholder || ""}
+              />
+            </div>
+          ))}
 
-        <button type="submit" className="submit-btn">
-          Book Now
-        </button>
-      </form>
+          <button className="submit-btn">Submit</button>
+        </form>
+      )}
     </div>
   );
 };

@@ -1,0 +1,44 @@
+.booking-admin-page {
+  max-width: 900px;
+  margin: 120px auto 40px auto;
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 25px;
+}
+
+.booking-table th,
+.booking-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 15px;
+}
+
+.detail-btn,
+.assign-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+}
+
+.detail-btn {
+  background: #007bff;
+}
+
+.assign-btn {
+  background: #28a745;
+}
+
+.detail-btn:hover {
+  background: #005ecb;
+}
+
+.assign-btn:hover {
+  background: #1f8f39;
+}
