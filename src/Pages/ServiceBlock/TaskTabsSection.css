@@ -56,28 +56,33 @@
   display: flex;
   gap: 40px;
   margin-top: 20px;
-  min-height: 300px; 
+  min-height: 300px;
+  align-items: flex-start; /* Căn hàng cho đẹp */
 }
 
 .tab-content img {
   width: 45%;
   border-radius: 12px;
-  height: 300px; 
+  height: 300px;
   object-fit: cover;
+  flex-shrink: 0; /* Đảm bảo ảnh không bị bóp méo */
 }
 
-.tab-content ul {
-  flex: 1;
+/* Class mới: Container chứa nội dung HTML từ DB */
+.tab-description-html {
+  flex: 1; /* Chiếm hết phần còn lại bên phải ảnh */
   font-size: 17px;
   color: #444;
-  padding: 0;
+  line-height: 1.6;
+}
+
+/* QUAN TRỌNG: Hiện dấu chấm đen */
+.tab-description-html ul {
+  list-style-type: disc !important; /* Dùng !important để chắc chắn hiện */
+  padding-left: 25px;               /* Thụt lề để thấy dấu chấm */
   margin: 0;
 }
 
-.tab-content ul li {
-  list-style: none; 
-  line-height: 1.6;
-  font-size: 17px;
-  margin: 0;
-  padding: 0;
+.tab-description-html li {
+  margin-bottom: 8px; /* Khoảng cách giữa các ý */
 }

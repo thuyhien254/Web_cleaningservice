@@ -6,9 +6,10 @@ const DefinitionSection = ({ data }) => {
 
       <h2 className="defc-title">{data?.title || ""}</h2>
 
-      <div className="defc-content">
-        <p>{data?.content || ""}</p>
-      </div>
+      <div 
+        className="defc-content"
+        dangerouslySetInnerHTML={{ __html: data?.content || "" }}
+      />
 
     </section>
   );

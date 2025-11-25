@@ -30,14 +30,14 @@ const PricingSection = ({ data }) => {
       {data?.note && (
         <div className="pricing-notes">
           <div className="note-title">
-            <span>Notes</span>
+            <span>Lưu ý</span>
           </div>
-
-          <ul>
-            <li>{data.note}</li>
-          </ul>
+          <div 
+            className="note-content-html"
+            dangerouslySetInnerHTML={{ __html: data.note }}
+          />
         </div>
-      )}
+      )} 
 
     </section>
   );
