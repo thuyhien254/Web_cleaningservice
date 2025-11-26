@@ -8,6 +8,7 @@ import Homepage from "../src/Pages/Homepage/Homepage";
 import ServicePage from "../src/Pages/Servicepage/Servicepage.jsx";
 
 import Bookingpage from "../src/Pages/Bookingpage/Booking";
+import BookingHistory from "../src/Pages/Bookingpage/BookingHistory.jsx";
 
 import Loginpage from "./Pages/Login/Loginpage";
 import Registerpage from "../src/Pages/Registerpage/Register";
@@ -16,6 +17,7 @@ import Forgot from "../src/Pages/Forgotaccountpage/Forgot";
 import RequireAdmin from "./components/RequireAdmin.jsx";
 import AdminBooking from "../src/Pages/AdminBooking/AdminBooking.jsx";
 import AdminLayout from "../src/components/Adminlayout.jsx";
+import Employees from "./Pages/AdminBooking/Employees.jsx";
 
 import RequireLogin from "../src/components/RequireLogin.jsx";
 
@@ -28,7 +30,6 @@ function App() {
 
         <Route element={<Layout />}>
           <Route path="/" element={<Homepage />} />
-
           <Route path="/services/:id" element={<ServicePage />} />
 
           <Route 
@@ -39,6 +40,15 @@ function App() {
               </RequireLogin>
             } 
           />
+          <Route 
+            path="/booking-history" 
+            element={
+              <RequireLogin>
+                <BookingHistory />
+              </RequireLogin>
+            } 
+          />
+
         </Route>
 
         <Route element={<Nolayout />}>
@@ -56,6 +66,7 @@ function App() {
           }
         >
           <Route index element={<AdminBooking />} />
+          <Route path="/admin/employees" element={<Employees />} />
         </Route>
       </Routes>
     </Router>

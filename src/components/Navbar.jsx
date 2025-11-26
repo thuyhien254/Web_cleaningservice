@@ -37,6 +37,7 @@ const Navbar = () => {
     }
   }, []);
 
+ 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (serviceRef.current && !serviceRef.current.contains(e.target)) {
@@ -47,8 +48,10 @@ const Navbar = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -125,12 +128,18 @@ const Navbar = () => {
               setIsServiceDropdownOpen(false);
             }}
           >
-            <FaUserCircle size={26} />
+            <div className="user-icon-wrapper">
+              <FaUserCircle className="user-icon" />
+            </div>
+
             {userName && <span className="user-short-name">{userName}</span>}
           </div>
 
           {isUserDropdownOpen && userName && (
             <ul className="dropdown-menu user-dropdown-menu">
+              <li>
+                <Link to="/booking-history">Booking History</Link>
+              </li>
               <li>
                 <button className="logout-btn" onClick={handleLogout}>
                   Logout
@@ -141,12 +150,8 @@ const Navbar = () => {
 
           {isUserDropdownOpen && !userName && (
             <ul className="dropdown-menu user-dropdown-menu">
-              <li>
-                <Link to="/login">Sign In</Link>
-              </li>
-              <li>
-                <Link to="/signup">Sign Up</Link>
-              </li>
+              <li><Link to="/login">Sign In</Link></li>
+              <li><Link to="/signup">Sign Up</Link></li>
             </ul>
           )}
         </div>

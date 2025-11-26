@@ -53,10 +53,10 @@ const NavbarAdmin = () => {
 
         <li>
           <Link
-            to="/admin/create-service"
-            className={isActive("/admin/create-service") ? "active-link" : ""}
+            to="/admin/employees"
+            className={isActive("/admin/employees") ? "active-link" : ""}
           >
-            Create Service
+            Employees
           </Link>
         </li>
       </ul>

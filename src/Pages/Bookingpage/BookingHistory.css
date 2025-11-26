@@ -1,0 +1,143 @@
+.history-container {
+  padding: 40px 0;
+  min-height: 75vh;
+  display: flex;
+  justify-content: center;
+}
+
+.history-wrapper {
+  width: 100%;
+  max-width: 1100px;
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+.history-heading {
+  font-size: 32px;
+  color: #1e90ff;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.table-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; 
+}
+
+.history-table thead {
+  background: #f1f1f3;
+}
+
+.history-table th {
+  font-size: 15px;
+  padding: 14px 10px;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.history-table td {
+  padding: 14px 10px;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.history-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.empty-row {
+  height: 42px;
+  border-bottom: 1px solid #eee;
+}
+
+.history-table tr:last-child td.empty-row {
+  border-bottom: none;
+}
+
+.status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-block;
+  min-width: 90px;
+}
+
+.status.pending {
+  background: #ffdd75;
+  color: #715c00;
+}
+
+.status.assigned {
+  background: #a5d8ff;
+  color: #004b85;
+}
+
+.status.done {
+  background: #c8f7c5;
+  color: #1d7a29;
+}
+
+.status.cancelled {
+  background: #ffb3b3;
+  color: #a60000;
+}
+
+.assigned-tag {
+  padding: 6px 14px;
+  background: #28a745;
+  color: white;
+  border-radius: 14px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.assigned-tag.empty {
+  background: #b3b3b3;
+}
+
+.pagination {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pagination button {
+  background: #efefef;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.pagination button.active {
+  background: #1e90ff;
+  color: white;
+  font-weight: 600;
+}
+
+.pagination button:hover:not(.active) {
+  background: #dcdcdc;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

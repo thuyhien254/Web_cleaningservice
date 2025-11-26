@@ -5,7 +5,6 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-        {/* --- Company Info --- */}
         <div className="footer-col company">
           <div className="footer-logo">
             <img src={logoImg} alt="HappyHome Logo" />
@@ -23,7 +22,6 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* --- Quick Links --- */}
         <div className="footer-col">
           <h4>Quick links</h4>
           <ul>
@@ -33,7 +31,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* --- Opening Hours --- */}
         <div className="footer-col">
           <h4>Opening Hours</h4>
           <p>Monday - Friday</p>

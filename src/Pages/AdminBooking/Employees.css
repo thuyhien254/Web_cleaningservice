@@ -1,0 +1,259 @@
+.employee-wrapper {
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 40px 20px 80px 20px;
+}
+
+.employee-heading {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e90ff;
+  margin-bottom: 28px;
+  margin-top: -30px;
+  letter-spacing: 0.8px;
+}
+
+.employee-top-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.add-btn {
+  width: 48px;
+  height: 48px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.add-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.employee-layout {
+  display: flex;
+  gap: 30px;
+}
+
+.employee-grid {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 25px;
+}
+
+.employee-card {
+  background: #ffffff;
+  text-align: center;
+  padding: 22px 15px;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.employee-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+}
+
+.employee-card.active {
+  border: 2px solid #2563eb;
+}
+
+.employee-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border: 3px solid #dbeafe;
+  transition: 0.2s ease;
+}
+
+.employee-avatar:hover {
+  transform: scale(1.05);
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 12px;
+  font-size: 13px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge.on_leave {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.employee-detail {
+  flex: 1;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  height: fit-content;
+  animation: slideIn 0.25s ease;
+}
+
+.detail-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.detail-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 12px auto 20px auto;
+  border: 4px solid #dbeafe;
+}
+
+.employee-detail p {
+  font-size: 16px;
+  margin: 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  line-height: 1.4;
+}
+
+.detail-close-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: #9ca3af;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+.detail-close-btn:hover {
+  background: #6b7280;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+  z-index: 999;
+}
+
+.popup-box {
+  background: white;
+  padding: 28px;
+  width: 420px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  animation: scaleIn 0.2s ease;
+}
+
+.popup-box h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #1e3a8a;
+}
+
+.popup-box input,
+.popup-box select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+  background: #f9fafb;
+}
+
+.popup-box input:focus,
+.popup-box select:focus {
+  outline: none;
+  border: 1px solid #2563eb;
+  background: white;
+}
+
+.popup-box input[type="file"] {
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  cursor: pointer;
+}
+
+.popup-box input[type="file"]::-webkit-file-upload-button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.popup-box input[type="file"]::-webkit-file-upload-button:hover {
+  background: #1d4ed8;
+}
+
+.popup-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.popup-button.save {
+  background: #2563eb;
+  color: white;
+}
+
+.popup-button.save:hover {
+  background: #1d4ed8;
+}
+
+.popup-button.close {
+  background: #6b7280;
+  color: white;
+}
+
+.popup-button.close:hover {
+  background: #4b5563;
+}
