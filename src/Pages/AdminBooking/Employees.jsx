@@ -1,40 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { FaPen } from "react-icons/fa";
 import "../AdminBooking/Employees.css";
 
 const EmployeePage = () => {
   const [cleaners, setCleaners] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
 
-  // =============================
-  // LOAD CLEANER LIST
-  // =============================
-  const loadCleaners = () => {
-    fetch("http://localhost:3000/api/admin/cleaners", {
-      headers: { Authorization: `Bearer ${token}` }
+  // LOAD CLEANERS 
+ const loadCleaners = useCallback(() => {
+  fetch("http://localhost:3000/api/admin/cleaners", {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setCleaners(data?.data || []);
+      setError(null);
     })
-      .then((res) => res.json())
-      .then((data) => setCleaners(data?.data || []))
-      .catch(() => setCleaners([]));
+    .catch(() => {
+      setError("Không thể tải dữ liệu nhân viên.");
+      setCleaners([]);
+    });
+}, [token]);
+
+  // Gọi khi component mount
+ useEffect(() => {
+  loadCleaners();
+}, [loadCleaners]);
+
+  // HANDLE SELECT
+  const handleSelectCleaner = (cleaner) => {
+    setSelected(cleaner);
+    setIsEditing(false);
   };
 
-  useEffect(() => {
-    loadCleaners();
-  }, []);
-
-  const handleAdd = () => {
-    setShowAddPopup(true);
+  // EDIT MODE
+  const handleEdit = () => {
+    setIsEditing(true);
   };
 
-  // =============================
-  // CREATE CLEANER + UPLOAD AVATAR
-  // =============================
-  const handleCreateCleaner = async (e) => {
+  // SUBMIT UPDATE
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
+
     formData.append("name", e.target.name.value);
     formData.append("phone", e.target.phone.value);
     formData.append("email", e.target.email.value);
@@ -44,27 +56,34 @@ const EmployeePage = () => {
       formData.append("avatar", e.target.avatar.files[0]);
     }
 
-    const res = await fetch("http://localhost:3000/api/admin/cleaners", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`
-        // ❗ KHÔNG SET Content-Type — Browser tự set boundary
-      },
-      body: formData
-    });
+    const res = await fetch(
+      `http://localhost:3000/api/admin/cleaners/${selected.id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: formData
+      }
+    );
 
     const result = await res.json();
 
     if (result.success) {
-      alert("Thêm nhân viên thành công!");
-      setShowAddPopup(false);
+      alert("Cập nhật thông tin nhân viên thành công!");
       loadCleaners();
+      setIsEditing(false);
+
+      // Cập nhật lại selected cleaner
+      setSelected((prev) => ({
+        ...prev,
+        ...result.data
+      }));
     } else {
       alert(result.message || "Lỗi!");
     }
   };
 
-  // Avatar fallback dùng UI Avatars
   const fallbackAvatar = (name = "User") =>
     `https://ui-avatars.com/api/?size=200&background=0D8ABC&color=fff&name=${encodeURIComponent(
       name
@@ -74,20 +93,22 @@ const EmployeePage = () => {
     <div className="employee-wrapper">
       <h2 className="employee-heading">EMPLOYEE MANAGEMENT</h2>
 
-      <div className="employee-top-row">
-        <button className="add-btn" onClick={handleAdd}>
-          +
-        </button>
-      </div>
+      {error && <div className="error-message">{error}</div>}
+      
+    <div className="employee-top-row">
+          <button className="add-btn">+</button>
+        </div>
 
       <div className="employee-layout">
-        {/* ============ LEFT GRID ============ */}
+        {/* GRID LIST */}
         <div className="employee-grid">
           {cleaners.map((c) => (
             <div
               key={c.id}
-              className={`employee-card ${selected?.id === c.id ? "active" : ""}`}
-              onClick={() => setSelected(c)}
+              className={`employee-card ${
+                selected?.id === c.id ? "active" : ""
+              }`}
+              onClick={() => handleSelectCleaner(c)}
             >
               <img
                 src={c.avatar || fallbackAvatar(c.name)}
@@ -95,12 +116,14 @@ const EmployeePage = () => {
                 alt="avatar"
               />
               <h3>{c.name}</h3>
-              <span className={`badge ${c.status.toLowerCase()}`}>{c.status}</span>
+              <span className={`badge ${c.status.toLowerCase()}`}>
+                {c.status}
+              </span>
             </div>
           ))}
         </div>
 
-        {/* ============ RIGHT DETAIL PANEL ============ */}
+        {/* DETAIL BOX */}
         {selected && (
           <div className="employee-detail">
             <h3 className="detail-title">Employee Detail</h3>
@@ -111,66 +134,54 @@ const EmployeePage = () => {
               alt="avatar"
             />
 
-            <p>
-              <b>Name:</b> {selected.name}
-            </p>
-            <p>
-              <b>Phone:</b> {selected.phone}
-            </p>
-            <p>
-              <b>Email:</b> {selected.email || "N/A"}
-            </p>
-            <p>
-              <b>Status:</b> {selected.status}
-            </p>
+            {isEditing ? (
+              <form onSubmit={handleSubmit}>
+                <label>Name</label>
+                <input name="name" defaultValue={selected.name} required />
 
-            <button className="detail-close-btn" onClick={() => setSelected(null)}>
-              Close
-            </button>
+                <label>Phone</label>
+                <input name="phone" defaultValue={selected.phone} required />
+
+                <label>Email</label>
+                <input name="email" defaultValue={selected.email} />
+
+                <label>Status</label>
+                <select name="status" defaultValue={selected.status}>
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="INACTIVE">INACTIVE</option>
+                  <option value="ON_LEAVE">ON_LEAVE</option>
+                </select>
+
+                <label>Avatar (Upload Image)</label>
+                <input name="avatar" type="file" accept="image/*" />
+
+                <button type="submit" className="popup-button save">
+                  Submit
+                </button>
+              </form>
+            ) : (
+              <div>
+                <p>
+                  <b>Name:</b> {selected.name}
+                </p>
+                <p>
+                  <b>Phone:</b> {selected.phone}
+                </p>
+                <p>
+                  <b>Email:</b> {selected.email}
+                </p>
+                <p>
+                  <b>Status:</b> {selected.status}
+                </p>
+
+                <button className="edit-btn" onClick={handleEdit}>
+                  <FaPen />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
-
-      {/* ============ POPUP ============ */}
-      {showAddPopup && (
-        <div className="popup-overlay">
-          <div className="popup-box employee-popup">
-            <h2>Add New Employee</h2>
-
-            <form onSubmit={handleCreateCleaner}>
-              <label>Name</label>
-              <input name="name" required />
-
-              <label>Phone</label>
-              <input name="phone" required />
-
-              <label>Email</label>
-              <input name="email" placeholder="optional" />
-
-              <label>Avatar (Upload Image)</label>
-              <input name="avatar" type="file" accept="image/*" />
-
-              <label>Status</label>
-              <select name="status">
-                <option value="ACTIVE">ACTIVE</option>
-                <option value="INACTIVE">INACTIVE</option>
-                <option value="ON_LEAVE">ON_LEAVE</option>
-              </select>
-
-              <button type="submit" className="popup-button save">
-                Save
-              </button>
-              <button
-                type="button"
-                className="popup-button close"
-                onClick={() => setShowAddPopup(false)}
-              >
-                Cancel
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,17 +1,18 @@
+/* WRAPPER + HEADER*/
 .employee-wrapper {
-  width: 100%;
-  max-width: 1250px;
-  margin: 0 auto;
-  padding: 40px 20px 80px 20px;
+   width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
 }
 
 .employee-heading {
-  text-align: center;
+text-align: center;
   font-size: 32px;
   font-weight: 800;
   color: #1e90ff;
   margin-bottom: 28px;
-  margin-top: -30px;
+  margin-top: -40px;
   letter-spacing: 0.8px;
 }
 
@@ -22,9 +23,9 @@
 }
 
 .add-btn {
-  width: 48px;
-  height: 48px;
-  background: #2563eb;
+  width: 100px;
+  height: 50px;
+  background: #1e90ff;
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -38,11 +39,13 @@
   transform: translateY(-2px);
 }
 
+/*LAYOUT*/
 .employee-layout {
   display: flex;
   gap: 30px;
 }
 
+/* GRID CARD NHÂN VIÊN*/
 .employee-grid {
   flex: 2;
   display: grid;
@@ -70,12 +73,14 @@
   border: 2px solid #2563eb;
 }
 
+/* Avatar*/
 .employee-avatar {
   width: 90px;
   height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px;
+  margin: 0 auto 12px auto;
+  display: block;
   border: 3px solid #dbeafe;
   transition: 0.2s ease;
 }
@@ -84,6 +89,7 @@
   transform: scale(1.05);
 }
 
+/* BADGES */
 .badge {
   display: inline-block;
   margin-top: 10px;
@@ -108,152 +114,100 @@
   color: #92400e;
 }
 
+/* DETAIL BOX */
 .employee-detail {
   flex: 1;
   background: #ffffff;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  height: fit-content;
-  animation: slideIn 0.25s ease;
+  padding: 25px 25px 35px 25px;
+  border-radius: 18px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  position: relative;
+  min-width: 330px;
 }
 
-.detail-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #1e3a8a;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
+/* Avatar giữa detail */
 .detail-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  width: 130px;
+  height: 130px;
   object-fit: cover;
+  border-radius: 50%;
   display: block;
-  margin: 12px auto 20px auto;
+  margin: 0 auto 15px auto;
   border: 4px solid #dbeafe;
 }
 
-.employee-detail p {
-  font-size: 16px;
-  margin: 10px 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e5e7eb;
-  line-height: 1.4;
+/* TITLE DETAIL */
+.detail-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 18px;
 }
 
-.detail-close-btn {
-  width: 100%;
-  margin-top: 20px;
-  padding: 12px;
-  background: #9ca3af;
+/* ICON EDIT — góc phải */
+.edit-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #2563eb;
   border: none;
+  padding: 9px 12px;
   border-radius: 10px;
-  color: white;
+  color: #fff;
   cursor: pointer;
-  font-size: 15px;
-}
-.detail-close-btn:hover {
-  background: #6b7280;
-}
-
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.45);
+  transition: 0.2s ease;
   display: flex;
   align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.2s ease;
-  z-index: 999;
+}
+.edit-btn:hover {
+  background: #1d4ed8;
 }
 
-.popup-box {
-  background: white;
-  padding: 28px;
-  width: 420px;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  animation: scaleIn 0.2s ease;
+/*FORM CHỈNH SỬA */
+.employee-detail form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.popup-box h2 {
-  margin-bottom: 20px;
-  text-align: center;
-  color: #1e3a8a;
+.employee-detail label {
+  font-weight: bold;
+  margin-bottom: 4px;
 }
 
-.popup-box input,
-.popup-box select {
+.employee-detail input,
+.employee-detail select {
   width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  margin-bottom: 16px;
+  padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #d1d5db;
   font-size: 15px;
   background: #f9fafb;
+  transition: 0.2s ease;
 }
 
-.popup-box input:focus,
-.popup-box select:focus {
+.employee-detail input:focus,
+.employee-detail select:focus {
   outline: none;
-  border: 1px solid #2563eb;
   background: white;
+  border-color: #1e90ff;
+  box-shadow: 0 0 0 2px #93c5fd;
 }
 
-.popup-box input[type="file"] {
-  padding: 8px;
-  border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  background: #f1f5f9;
-  cursor: pointer;
-}
-
-.popup-box input[type="file"]::-webkit-file-upload-button {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.popup-box input[type="file"]::-webkit-file-upload-button:hover {
-  background: #1d4ed8;
-}
-
-.popup-button {
+/* Nút submit */
+.popup-button.save {
+  margin-top: 8px;
   width: 100%;
   padding: 12px;
-  margin-top: 8px;
-  border-radius: 10px;
+  background: #1e90ff;
   border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
+  transition: 0.2s ease;
 }
-
-.popup-button.save {
-  background: #2563eb;
-  color: white;
-}
-
 .popup-button.save:hover {
-  background: #1d4ed8;
-}
-
-.popup-button.close {
-  background: #6b7280;
-  color: white;
-}
-
-.popup-button.close:hover {
-  background: #4b5563;
+  background: #1e90ff;
 }

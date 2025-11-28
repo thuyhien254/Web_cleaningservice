@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../components/Navbar.css";
 import logonoword from "../assets/logonoword.png";
 import { FaUserCircle } from "react-icons/fa";
+import { useAuth } from "../contexts/AuthContext";
+
 
 const NavbarAdmin = () => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -10,27 +12,21 @@ const NavbarAdmin = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        const parsed = JSON.parse(savedUser);
-        if (parsed.full_name) {
-          const parts = parsed.full_name.trim().split(" ");
-          const lastTwo = parts.slice(-2).join(" ");
-          setUserName(lastTwo);
-        }
-      } catch {}
-    }
-  }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsUserDropdownOpen(false);
-    navigate("/login");
-  };
+ useEffect(() => {
+  if (user?.full_name) {
+    const parts = user.full_name.trim().split(" ");
+    const lastTwo = parts.slice(-2).join(" ");
+    setUserName(lastTwo);
+  }
+}, [user]);
+
+ const handleLogout = () => {
+  logout();
+  navigate("/login");
+};
 
   const isActive = (path) => location.pathname === path;
 
@@ -53,12 +49,31 @@ const NavbarAdmin = () => {
 
         <li>
           <Link
+            to="/admin/booking"
+            className={isActive("/admin/booking") ? "active-link" : ""}
+          >
+            Booking
+          </Link>
+        </li>
+
+        <li>
+          <Link
             to="/admin/employees"
             className={isActive("/admin/employees") ? "active-link" : ""}
           >
             Employees
           </Link>
         </li>
+
+        <li>
+          <Link
+            to="/admin/service"
+            className={isActive("/admin/service") ? "active-link" : ""}
+          >
+            Service
+          </Link>
+        </li>
+
       </ul>
 
       <div className="nav-right">

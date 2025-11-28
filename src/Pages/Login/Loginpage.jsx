@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";   
 import "../Login/Loginpage.css";
 import logonoword from "../../assets/logonoword.png";
 
@@ -13,6 +14,7 @@ const Loginpage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();                       
 
   const from = location.state?.from || "/";
 
@@ -41,14 +43,15 @@ const Loginpage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem("user", JSON.stringify(data.data.user));
-
-        if (data.data.user.role === "ADMIN") {
+        const token = data.data.token;
+        const user = data.data.user;
+        login(token, user);
+        if (user.role === "ADMIN") {
           navigate("/admin", { replace: true });
         } else {
           navigate(from, { replace: true });
         }
+
       } else {
         setError(data.message || "Login failed");
       }
@@ -78,6 +81,7 @@ const Loginpage = () => {
           {error && <p className="error">{error}</p>}
 
           <form onSubmit={handleSubmit}>
+
             <div className="input-group">
               <label>Email</label>
               <input
@@ -128,6 +132,7 @@ const Loginpage = () => {
             <p className="back-link">
               <Link to="/">← Back to HappyHome</Link>
             </p>
+
           </form>
         </div>
 

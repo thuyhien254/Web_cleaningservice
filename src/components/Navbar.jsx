@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";   // <== Quan trọng
+
 import "../components/Navbar.css";
 import logonoword from "../assets/logonoword.png";
 import { FaUserCircle } from "react-icons/fa";
@@ -13,9 +15,11 @@ const Navbar = () => {
   const serviceRef = useRef(null);
   const userRef = useRef(null);
 
+  const { user, logout } = useAuth();              // <== LẤY USER TỪ AUTH CONTEXT
   const location = useLocation();
   const navigate = useNavigate();
 
+  /** LOAD SERVICES LIST **/
   useEffect(() => {
     fetch("http://localhost:3000/api/services")
       .then((res) => res.json())
@@ -23,21 +27,18 @@ const Navbar = () => {
       .catch(() => {});
   }, []);
 
+  /** TẠO USERNAME TỪ AUTHCONTEXT.USER **/
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        const parsed = JSON.parse(savedUser);
-        if (parsed.full_name) {
-          const parts = parsed.full_name.trim().split(" ");
-          const lastTwo = parts.slice(-2).join(" ");
-          setUserName(lastTwo);
-        }
-      } catch {}
+    if (user?.full_name) {
+      const parts = user.full_name.trim().split(" ");
+      const lastTwo = parts.slice(-2).join(" ");
+      setUserName(lastTwo);
+    } else {
+      setUserName(null);
     }
-  }, []);
+  }, [user]);
 
- 
+  /** CLICK OUTSIDE TO CLOSE DROPDOWNS **/
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (serviceRef.current && !serviceRef.current.contains(e.target)) {
@@ -48,19 +49,16 @@ const Navbar = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
+  /** ĐĂNG XUẤT **/
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUserName(null);
-    setIsUserDropdownOpen(false);
+    logout();                      // <== Dùng logout từ AuthContext
     navigate("/login");
   };
 
+  /** ACTIVE LINKS **/
   const isActive = (path) => location.pathname === path;
   const serviceActive = location.pathname.startsWith("/services/");
 
@@ -135,11 +133,10 @@ const Navbar = () => {
             {userName && <span className="user-short-name">{userName}</span>}
           </div>
 
+          {/* USER LOGGED IN */}
           {isUserDropdownOpen && userName && (
             <ul className="dropdown-menu user-dropdown-menu">
-              <li>
-                <Link to="/booking-history">Booking History</Link>
-              </li>
+              <li><Link to="/booking-history">Booking History</Link></li>
               <li>
                 <button className="logout-btn" onClick={handleLogout}>
                   Logout
@@ -148,6 +145,7 @@ const Navbar = () => {
             </ul>
           )}
 
+          {/* USER NOT LOGGED IN */}
           {isUserDropdownOpen && !userName && (
             <ul className="dropdown-menu user-dropdown-menu">
               <li><Link to="/login">Sign In</Link></li>

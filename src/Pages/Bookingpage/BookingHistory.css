@@ -1,72 +1,102 @@
-.history-container {
-  padding: 40px 0;
-  min-height: 75vh;
-  display: flex;
-  justify-content: center;
-}
+/* SHARED WRAPPER + HEADING*/
 
-.history-wrapper {
+.table-wrapper {
   width: 100%;
-  max-width: 1100px;
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-  margin: auto;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
 }
 
-.history-heading {
-  font-size: 32px;
-  color: #1e90ff;
-  font-weight: 800;
+.table-heading {
   text-align: center;
-  margin-bottom: 25px;
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e90ff;
+  margin-bottom: 28px;
+  margin-top: -40px;
+  letter-spacing: 0.8px;
 }
+
+/* TABLE CARD */
 
 .table-card {
-  border-radius: 12px;
-  overflow: hidden;
   background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+  overflow-x: auto;
 }
 
-.history-table {
+/* TABLE CORE*/
+
+.main-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; 
+  table-layout: fixed;
 }
 
-.history-table thead {
-  background: #f1f1f3;
-}
-
-.history-table th {
-  font-size: 15px;
-  padding: 14px 10px;
-  font-weight: 600;
+.main-table th {
+  background: #f4f7fc;
+  padding: 15px;
+  font-weight: 700;
   text-align: center;
-  border-bottom: 2px solid #e5e5e5;
+  color: #333;
+  font-size: 15.5px;
+  border-bottom: 2px solid #e6e6e6;
 }
 
-.history-table td {
-  padding: 14px 10px;
-  font-size: 15px;
+.main-table td {
+  padding: 15px 10px;
+  text-align: center;
   border-bottom: 1px solid #eee;
-  text-align: center;
-  word-wrap: break-word;
+  font-size: 15px;
+  color: #444;
 }
 
-.history-table tbody tr:hover {
+.main-table tbody tr:hover {
   background: #fafafa;
 }
 
+/* Empty rows for pagination consistency */
 .empty-row {
-  height: 42px;
-  border-bottom: 1px solid #eee;
+  height: 48px;
 }
 
-.history-table tr:last-child td.empty-row {
-  border-bottom: none;
+/* PAGINATION*/
+
+.pagination {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
+
+.pagination button {
+  background: #efefef;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pagination button:hover:not(.active):not(:disabled) {
+  background: #dedede;
+}
+
+.pagination button.active {
+  background: #1e90ff;
+  color: white;
+  font-weight: 700;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/*BOOKING HISTORY ONLY*/
 
 .status {
   padding: 6px 14px;
@@ -108,36 +138,4 @@
 
 .assigned-tag.empty {
   background: #b3b3b3;
-}
-
-.pagination {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-.pagination button {
-  background: #efefef;
-  border: none;
-  padding: 7px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: 0.2s;
-}
-
-.pagination button.active {
-  background: #1e90ff;
-  color: white;
-  font-weight: 600;
-}
-
-.pagination button:hover:not(.active) {
-  background: #dcdcdc;
-}
-
-.pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }

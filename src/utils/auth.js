@@ -4,20 +4,35 @@ export async function getCurrentUser() {
 
   try {
     const response = await fetch("http://localhost:3000/api/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
-    const data = await response.json();
-    if (response.ok) return data.data.user;
+    // Nếu token hết hạn hoặc không hợp lệ → BE sẽ trả 401
+    if (response.status === 401 || response.status === 403) {
+      clearAuthStorage();
+      return null;
+    }
 
+    const data = await response.json();
+
+    // Nếu có user thì trả về
+   if (data?.data?.user) {
+  const user = data.data.user;
+  return user;
+}
     return null;
-  } catch {
+
+  } catch (error) {
     return null;
   }
 }
 
 export function logoutUser() {
+  clearAuthStorage();
+}
+
+function clearAuthStorage() {
   localStorage.removeItem("token");
+  localStorage.removeItem("role");
+
 }

@@ -3,43 +3,31 @@ import "../Bookingpage/BookingHistory.css";
 
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
-
-  const ROWS_PER_PAGE = 10; 
+  const ROWS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
+  // =============================
+  // LOAD DATA
+  // =============================
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     fetch("http://localhost:3000/api/bookings", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("API HISTORY RESPONSE:", data);
-        const safeBookings = data?.data?.bookings ?? [];
-        setBookings(safeBookings);
+        const raw = data?.data;
+        const safe = Array.isArray(raw) ? raw : raw?.bookings ?? [];
+        setBookings(safe);
       })
       .catch(() => setBookings([]));
   }, []);
 
-  const statusTag = (status) => {
-    switch (status) {
-      case "PENDING":
-        return <span className="status pending">Pending</span>;
-      case "CONFIRMED":
-        return <span className="status assigned">Assigned</span>;
-      case "COMPLETED":
-        return <span className="status done">Done</span>;
-      case "CANCELLED":
-        return <span className="status cancelled">Cancelled</span>;
-      default:
-        return <span className="status pending">Pending</span>;
-    }
-  };
-
+  // =============================
+  // PAGINATION LOGIC (CHUNG FORMAT)
+  // =============================
   const totalPages = Math.ceil(bookings.length / ROWS_PER_PAGE) || 1;
 
   const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
@@ -47,12 +35,26 @@ const BookingHistory = () => {
 
   const emptyRows = Math.max(ROWS_PER_PAGE - currentRows.length, 0);
 
+  // =============================
+  // STATUS TAG
+  // =============================
+  const statusTag = (status) => {
+    const classes = {
+      PENDING: "pending",
+      CONFIRMED: "assigned",
+      COMPLETED: "done",
+      CANCELLED: "cancelled"
+    };
+    return <span className={`status ${classes[status] || "pending"}`}>{status}</span>;
+  };
+
   return (
-    <div className="history-wrapper">
-      <h2 className="history-heading">BOOKING HISTORY</h2>
+    <div className="table-wrapper">
+
+      <h2 className="table-heading">BOOKING HISTORY</h2>
 
       <div className="table-card">
-        <table className="history-table">
+        <table className="main-table">
           <thead>
             <tr>
               <th>Date</th>
@@ -60,7 +62,7 @@ const BookingHistory = () => {
               <th>Service</th>
               <th>Total Price</th>
               <th>Status</th>
-              <th>Assigned Cleaner</th>
+              <th>Cleaner</th>
             </tr>
           </thead>
 
@@ -68,44 +70,40 @@ const BookingHistory = () => {
             {currentRows.map((b, index) => (
               <tr key={index}>
                 <td>{new Date(b.start_time).toLocaleDateString()}</td>
+
                 <td>
                   {new Date(b.start_time).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
                 </td>
-                <td>{b.service?.name}</td>
-                <td>{Number(b.total_price).toLocaleString()} đ</td>
+
+                <td>{b.service?.name || "N/A"}</td>
+
+                <td>{Number(b.total_price || 0).toLocaleString()} đ</td>
+
                 <td>{statusTag(b.status)}</td>
-                <td>
-                  {b.cleaner ? (
-                    <span className="assigned-tag">{b.cleaner.name}</span>
-                  ) : (
-                    <span className="assigned-tag empty">Not Assigned</span>
-                  )}
-                </td>
+
+                <td>{b.cleaner?.name || "Not Assigned"}</td>
               </tr>
             ))}
 
             {Array.from({ length: emptyRows }).map((_, i) => (
               <tr key={`empty-${i}`}>
-                <td className="empty-row"></td>
-                <td className="empty-row"></td>
-                <td className="empty-row"></td>
-                <td className="empty-row"></td>
-                <td className="empty-row"></td>
-                <td className="empty-row"></td>
+                {Array(6)
+                  .fill(0)
+                  .map((_, c) => (
+                    <td key={c} className="empty-row"></td>
+                  ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
+      {/* Pagination same format with Admin */}
       <div className="pagination">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((p) => p - 1)}
-        >
+        <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
           {"<"}
         </button>
 
@@ -119,13 +117,11 @@ const BookingHistory = () => {
           </button>
         ))}
 
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((p) => p + 1)}
-        >
+        <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>
           {">"}
         </button>
       </div>
+
     </div>
   );
 };
