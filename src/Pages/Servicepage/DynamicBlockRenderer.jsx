@@ -12,7 +12,7 @@ const DynamicBlockRenderer = ({ layout }) => {
     intro: IntroSection,
     definition: DefinitionSection,
     pricing: PricingSection,
-    tasktab: TaskTabsSection,
+    task_tab: TaskTabsSection,
     process: ProcessSection,
     booking: BookingSection,
   };
