@@ -6,10 +6,7 @@ import {
 } from "react-icons/fa";
 import "./ServiceBuilder.css";
 
-// 1. IMPORT CONFIG DATA
-import { BLOCK_SCHEMAS } from "./BlockSchemas";
-
-// 2. IMPORT COMPONENT HIỂN THỊ
+// 2. IMPORT COMPONENT HIỂN THỊ (PREVIEW)
 import IntroSection from "../ServiceBlock/IntroSection";
 import DefinitionSection from "../ServiceBlock/DefinitionSection";
 import PricingSection from "../ServiceBlock/PricingSection";
@@ -17,7 +14,7 @@ import TaskTabsSection from "../ServiceBlock/TaskTabsSection";
 import ProcessSection from "../ServiceBlock/ProcessSection";
 import BookingSection from "../ServiceBlock/BookingSection";
 
-// --- COMPONENT CON 
+// --- COMPONENT CON: DYNAMIC FIELD (ĐÃ FIX LỖI DROPDOWN & THÊM DÒNG) ---
 const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
   
   // 1. Input Text / Number
@@ -30,7 +27,6 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
         <input
           className="input-field"
           type={fieldConfig.type}
-          // Fix lỗi: Nếu value là 0 thì vẫn hiển thị số 0 thay vì rỗng
           value={value !== undefined && value !== null ? value : ""}
           onChange={(e) => onChange(fieldKey, fieldConfig.type === "number" ? Number(e.target.value) : e.target.value)}
           placeholder={fieldConfig.placeholder}
@@ -53,7 +49,7 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
     );
   }
 
-  // 3. Select Box
+  // 3. Select Box - [FIXED] Xử lý cả mảng string ['a','b'] và object [{label, value}]
   if (fieldConfig.type === "select") {
     return (
       <div className="form-group">
@@ -63,11 +59,16 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
           value={value || ""}
           onChange={(e) => onChange(fieldKey, e.target.value)}
         >
-          {fieldConfig.options?.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
+          <option value="">-- Chọn --</option>
+          {fieldConfig.options?.map((opt, index) => {
+            const optValue = typeof opt === 'object' ? opt.value : opt;
+            const optLabel = typeof opt === 'object' ? opt.label : opt;
+            return (
+              <option key={index} value={optValue}>
+                {optLabel}
+              </option>
+            );
+          })}
         </select>
       </div>
     );
@@ -108,22 +109,18 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
     );
   }
 
-  // 5. Array (List Items) - FIX QUAN TRỌNG Ở ĐÂY
+  // 5. Array (List Items) - [FIXED] Tự động điền số thứ tự
   if (fieldConfig.type === "array") {
     const items = Array.isArray(value) ? value : [];
 
-    // Hàm thêm dòng mới thông minh hơn: Tự điền dữ liệu mặc định
     const handleAddItem = () => {
         const newItem = {};
-        
-        // Nếu có schema con, ta sẽ tự tạo dữ liệu mặc định để tránh object rỗng
         if (fieldConfig.itemSchema) {
             Object.keys(fieldConfig.itemSchema).forEach(key => {
-                // TỰ ĐỘNG ĐIỀN SỐ THỨ TỰ (Quan trọng để fix lỗi Backend)
                 if (key === 'number' || key === 'step_number' || key === 'order') {
                     newItem[key] = items.length + 1; 
                 } else {
-                    newItem[key] = ""; // Các trường khác để rỗng string để tránh undefined
+                    newItem[key] = ""; 
                 }
             });
         }
@@ -176,16 +173,19 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
   return null;
 };
 
-// --- MAIN COMPONENT ---
+// --- MAIN COMPONENT: SERVICE BUILDER ---
 const ServiceBuilder = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
 
-  // --- STATE CẬP NHẬT ĐẦY ĐỦ FIELD ---
+  const [schemas, setSchemas] = useState({});
+  
+  // --- [UPDATED] THÊM TRƯỜNG DESCRIPTION VÀO STATE ---
   const [basicInfo, setBasicInfo] = useState({ 
     name: "", 
     slug: "", 
+    description: "", // Thêm trường này
     original_price: 0, 
     duration: 60      
   });
@@ -193,34 +193,63 @@ const ServiceBuilder = () => {
   const [blocks, setBlocks] = useState([]);
   const [activeBlockId, setActiveBlockId] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // --- LOAD DATA ---
   useEffect(() => {
-    if (!isEditMode) return;
     const token = localStorage.getItem("token");
+    if (!token) return;
     setLoading(true);
 
-    fetch(`http://localhost:3000/api/admin/services/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const service = data?.data?.service;
-        if (service) {
-          setBasicInfo({
-            name: service.name || "",
-            slug: service.slug || "",
-            original_price: service.base_price || 0,
-            duration: service.duration_minutes || 60,
-          });
-          const layout = service.layout_config || [];
-          setBlocks(layout.map((b) => ({ ...b, _tempId: b._tempId || Math.random().toString() })));
+    const fetchData = async () => {
+      try {
+        // 1. Lấy Schema
+        const schemaRes = await fetch("http://localhost:3000/api/admin/services/block-schemas", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const schemaData = await schemaRes.json();
+        
+        if (schemaData.success) {
+           const finalSchemas = schemaData.data.schemas || schemaData.data || {};
+           setSchemas(finalSchemas);
         }
-      })
-      .catch((err) => console.error("Load error:", err))
-      .finally(() => setLoading(false));
+
+        // 2. Lấy dữ liệu Service
+        if (isEditMode) {
+          const serviceRes = await fetch(`http://localhost:3000/api/admin/services/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const serviceData = await serviceRes.json();
+          const service = serviceData?.data?.service;
+          
+          if (service) {
+            // --- [UPDATED] LOAD DESCRIPTION TỪ API ---
+            setBasicInfo({
+              name: service.name || "",
+              slug: service.slug || "",
+              description: service.description || "", // Load description
+              original_price: service.base_price || 0,
+              duration: service.duration_minutes || 60,
+            });
+            
+            let loadedBlocks = [];
+            if (typeof service.layout_config === 'string') {
+                try { loadedBlocks = JSON.parse(service.layout_config); } catch(e){}
+            } else {
+                loadedBlocks = service.layout_config || [];
+            }
+            setBlocks(loadedBlocks.map((b) => ({ ...b, _tempId: b._tempId || Math.random().toString() })));
+          }
+        }
+      } catch (err) {
+        console.error("Lỗi tải dữ liệu:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [id, isEditMode]);
 
   // --- UPLOAD IMAGE ---
@@ -244,8 +273,9 @@ const ServiceBuilder = () => {
 
   // --- ACTIONS ---
   const addBlock = (type) => {
-    const schema = BLOCK_SCHEMAS[type];
+    const schema = schemas[type];
     if(!schema) return;
+
     const newBlock = {
       _tempId: Date.now().toString(),
       type: type,
@@ -281,81 +311,50 @@ const ServiceBuilder = () => {
   };
 
   // --- SAVE DATA ---
-  // --- SAVE DATA (ĐÃ CẬP NHẬT KIỂM TRA TOKEN) ---
   const handleSave = async () => {
-    // 1. LẤY TOKEN VÀ KIỂM TRA NGAY LẬP TỨC
-    const token = localStorage.getItem("token"); // Kiểm tra xem key lưu trong máy bạn là "token" hay "accessToken" nhé
-    
-    if (!token) {
-      alert("Phiên đăng nhập hết hạn hoặc không tìm thấy Token. Vui lòng đăng nhập lại!");
-      // Có thể navigate("/login") ở đây nếu muốn
-      return; 
-    }
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Vui lòng đăng nhập!");
 
-    // 2. Validate dữ liệu đầu vào (Như đã sửa ở bước trước)
-    if (!basicInfo.name || !basicInfo.name.trim()) {
-      return alert("Tên dịch vụ không được để trống!");
-    }
+    if (!basicInfo.name || !basicInfo.name.trim()) return alert("Nhập tên dịch vụ!");
 
-    const price = Number(basicInfo.original_price);
-    const duration = Number(basicInfo.duration);
-
-    if (isNaN(price) || price < 0) return alert("Giá tiền phải là số và không được âm!");
-    if (isNaN(duration) || duration <= 0) return alert("Thời gian thực hiện phải lớn hơn 0!");
-
-    // 3. Chuẩn bị Payload
+    // --- [UPDATED] GỬI DESCRIPTION LÊN SERVER ---
     const payload = {
       name: basicInfo.name.trim(),
-      base_price: price,
-      duration_minutes: duration,
+      description: basicInfo.description, // Gửi description
+      base_price: Number(basicInfo.original_price),
+      duration_minutes: Number(basicInfo.duration),
       ...(basicInfo.slug && { slug: basicInfo.slug.trim() }), 
       layout_config: blocks.map(({ _tempId, ...rest }) => rest)
     };
 
-    console.log("Token gửi đi:", token); // Log để kiểm tra xem có token chưa
-    console.log("Payload gửi đi:", payload);
-
-    const url = isEditMode
-      ? `http://localhost:3000/api/admin/services/${id}`
+    const url = isEditMode 
+      ? `http://localhost:3000/api/admin/services/${id}` 
       : `http://localhost:3000/api/admin/services`;
-
-    const method = isEditMode ? "PUT" : "POST";
 
     try {
       const res = await fetch(url, {
-        method: method,
-        headers: { 
-            "Content-Type": "application/json", 
-            "Authorization": `Bearer ${token}` // QUAN TRỌNG: Gửi kèm token
-        },
+        method: isEditMode ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(payload),
       });
-
       const result = await res.json();
 
       if (!res.ok) {
-        console.error("Server Error Response:", result);
-        alert(`Lỗi (${res.status}): ${result.message || "Không thể lưu dữ liệu"}`);
-        return;
-      }
-
-      if (result.success) {
+        alert(`Lỗi: ${result.message || "Không thể lưu"}`);
+      } else {
         alert("Lưu thành công!");
         if (!isEditMode && result.data?.service?._id) {
           navigate(`/admin/services/${result.data.service._id}/builder`, { replace: true });
         }
-      } else {
-        alert(result.message || "Lỗi khi lưu.");
       }
     } catch (err) {
-      console.error("Lỗi mạng:", err);
-      alert("Không thể kết nối tới Server.");
+      alert("Lỗi kết nối server.");
     }
   };
 
   // --- PREVIEW RENDER ---
   const renderBlockPreview = (block) => {
-    const props = { key: block._tempId, data: block.data };
+    const props = { data: block.data };
     switch (block.type) {
       case "intro": return <IntroSection {...props} />;
       case "definition": return <DefinitionSection {...props} />;
@@ -363,14 +362,14 @@ const ServiceBuilder = () => {
       case "task_tab": return <TaskTabsSection {...props} />;
       case "process": return <ProcessSection {...props} />;
       case "booking": return <BookingSection {...props} />;
-      default: return <div key={block._tempId} style={{padding:20, border:'1px dashed #ccc'}}>Unknown Block</div>;
+      default: return <div style={{padding:20, border:'1px dashed #ccc'}}>Unknown Block</div>;
     }
   };
 
-  if (loading) return <div style={{ padding: 20 }}>Loading...</div>;
+  if (loading) return <div style={{ padding: 20, textAlign: 'center' }}>Đang tải dữ liệu...</div>;
 
   const activeBlock = blocks.find((b) => b._tempId === activeBlockId);
-  const activeSchema = activeBlock ? BLOCK_SCHEMAS[activeBlock.type] : null;
+  const activeSchema = activeBlock ? schemas[activeBlock.type] : null;
 
   return (
     <div className="builder-wrapper">
@@ -378,7 +377,6 @@ const ServiceBuilder = () => {
       {/* PANEL TRÁI */}
       {!isPreviewMode && (
         <div className="builder-left">
-          
           <div className="left-header-area">
             <div className="header-row">
               <h2 className="page-title">{isEditMode ? "Sửa Dịch Vụ" : "Tạo Dịch Vụ"}</h2>
@@ -388,42 +386,50 @@ const ServiceBuilder = () => {
               </div>
             </div>
 
+            {/* Input Name */}
             <div className="input-group">
               <label className="input-label">Tên Dịch Vụ</label>
               <input type="text" className="input-basic" placeholder="VD: Dọn dẹp nhà..."
                 value={basicInfo.name} onChange={(e) => setBasicInfo({ ...basicInfo, name: e.target.value })} />
             </div>
 
-            <div className="input-row">
+            {/* --- [UPDATED] INPUT MÔ TẢ DỊCH VỤ --- */}
+            <div className="input-group" style={{marginTop: '10px'}}>
+              <label className="input-label">Mô tả ngắn</label>
+              <textarea 
+                className="input-basic" 
+                rows={3}
+                placeholder="Mô tả tóm tắt về dịch vụ..."
+                value={basicInfo.description} 
+                onChange={(e) => setBasicInfo({ ...basicInfo, description: e.target.value })} 
+                style={{ resize: 'vertical', minHeight: '60px' }}
+              />
+            </div>
+
+            {/* Input Giá & Thời gian */}
+            <div className="input-row" style={{marginTop: '10px'}}>
               <div className="input-group">
                 <label className="input-label">Giá (VNĐ)</label>
-                <input type="number" className="input-basic" placeholder="0"
-                  value={basicInfo.original_price} 
-                  onChange={(e) => setBasicInfo({ ...basicInfo, original_price: e.target.value })} 
-                />
+                <input type="number" className="input-basic" value={basicInfo.original_price} onChange={(e) => setBasicInfo({ ...basicInfo, original_price: e.target.value })} />
               </div>
               <div className="input-group">
                 <label className="input-label">Thời gian (Phút)</label>
-                <input type="number" className="input-basic" placeholder="60"
-                  value={basicInfo.duration} 
-                  onChange={(e) => setBasicInfo({ ...basicInfo, duration: e.target.value })} 
-                />
+                <input type="number" className="input-basic" value={basicInfo.duration} onChange={(e) => setBasicInfo({ ...basicInfo, duration: e.target.value })} />
               </div>
             </div>
           </div>
 
           <div className="block-list">
-            {blocks.length === 0 && <div style={{textAlign:'center', color:'#999', padding:20, border:'2px dashed #eee', borderRadius:8}}>Chưa có nội dung.<br/>Bấm nút bên dưới để thêm.</div>}
-            
+            {blocks.length === 0 && <div style={{textAlign:'center', color:'#999', padding:20, border:'2px dashed #eee', borderRadius:8}}>Chưa có nội dung.</div>}
             {blocks.map((block, index) => {
-              const schema = BLOCK_SCHEMAS[block.type] || { name: block.type };
+              const schema = schemas[block.type] || { name: block.type };
               return (
                 <div key={block._tempId} className={`block-item ${activeBlockId === block._tempId ? "active" : ""}`} onClick={() => setActiveBlockId(block._tempId)}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px", overflow: "hidden" }}>
                     <FaGripLines color="#b2bec3" />
                     <div>
                       <div className="block-name">{schema.name}</div>
-                      <div className="block-desc">{block.data.title || block.data.heading || block.data.service_title || "Không tiêu đề"}</div>
+                      <div className="block-desc">{block.data.title || block.data.heading || "Không tiêu đề"}</div>
                     </div>
                   </div>
                   <div className="action-group">
@@ -440,7 +446,6 @@ const ServiceBuilder = () => {
             <button className="btn-add" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <FaPlus /> Thêm Block
             </button>
-
             {isMenuOpen && (
               <div style={{
                   position: 'absolute', bottom: '110%', left: '50%', transform: 'translateX(-50%)',
@@ -448,8 +453,8 @@ const ServiceBuilder = () => {
                   boxShadow: '0 10px 40px rgba(0,0,0,0.2)', border: '1px solid #e5e7eb',
                   zIndex: 9999, maxHeight: '400px', overflowY: 'auto', padding: '8px 0'
                 }}>
-                <div style={{padding:'8px 16px', fontSize:'11px', fontWeight:'700', color:'#9ca3af', textTransform:'uppercase', letterSpacing:'0.5px'}}>Chọn loại nội dung</div>
-                {Object.values(BLOCK_SCHEMAS).map((schema) => (
+                <div style={{padding:'8px 16px', fontSize:'11px', fontWeight:'700', color:'#9ca3af', textTransform:'uppercase'}}>Chọn loại nội dung</div>
+                {Object.values(schemas).map((schema) => (
                   <button key={schema.type} onClick={() => addBlock(schema.type)}
                     style={{
                       display: 'block', width: '100%', textAlign: 'left', padding: '12px 16px',
@@ -478,11 +483,18 @@ const ServiceBuilder = () => {
              </button>
           </div>
           <div style={{paddingBottom: 50}}>
-             {blocks.length === 0 ? <p style={{textAlign:'center', padding:50, color:'#9ca3af'}}>Chưa có nội dung để hiển thị</p> : blocks.map(block => renderBlockPreview(block))}
+             {blocks.length === 0 
+                ? <p style={{textAlign:'center', padding:50, color:'#9ca3af'}}>Chưa có nội dung</p> 
+                : blocks.map(block => (
+                    <div key={block._tempId}>
+                        {renderBlockPreview(block)}
+                    </div>
+                  ))
+             }
           </div>
         </div>
       ) : (
-        activeBlock && activeSchema ? (
+        activeBlock && activeSchema && activeSchema.fields ? (
           <div className="builder-right">
             <div className="right-header">
               <h3 style={{ margin: 0, fontSize: '16px', fontWeight:'700', color:'#111827' }}>{activeSchema.name}</h3>
@@ -495,7 +507,7 @@ const ServiceBuilder = () => {
                   fieldKey={fieldKey} 
                   fieldConfig={config} 
                   value={activeBlock.data[fieldKey]}
-                  onUpload={handleUploadImage} // Truyền hàm upload vào đây
+                  onUpload={handleUploadImage}
                   onChange={(key, val) => updateBlockData(activeBlock._tempId, key, val)} 
                 />
               ))}
