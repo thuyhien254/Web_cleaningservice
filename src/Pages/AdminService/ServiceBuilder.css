@@ -1,0 +1,280 @@
+/* ServiceBuilder.css - FIXED LAYOUT */
+
+/* Khung bao ngoài cùng: Full màn hình, không cuộn body */
+.builder-wrapper {
+  display: flex;
+  height: calc(100vh - 20px); /* Chiều cao cố định bằng màn hình trừ padding */
+  gap: 20px;
+  padding: 20px;
+  background-color: #f3f4f6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+  overflow: hidden; /* Chặn cuộn trang chính */
+}
+
+/* --- LEFT PANEL --- */
+.builder-left {
+  width: 350px;
+  min-width: 350px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* Xếp dọc: Header -> List -> Button */
+  height: 100%;
+  overflow: hidden; /* Chặn cuộn panel */
+}
+
+/* Phần trên cùng của Left Panel (Title, Save, Input) */
+.left-header-area {
+  padding: 20px 20px 10px 20px;
+  flex-shrink: 0; /* Không bị co lại */
+  border-bottom: 1px solid #f3f4f6;
+  background: #fff;
+  z-index: 10;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+/* Phần Danh sách Block (Được phép cuộn) */
+.block-list {
+  flex: 1; /* Chiếm hết khoảng trống còn lại */
+  overflow-y: auto; /* Chỉ cuộn khu vực này */
+  padding: 15px 20px;
+}
+
+/* Phần chứa Nút Thêm Block (Ghim ở đáy) */
+.add-area {
+  flex-shrink: 0;
+  padding: 15px 20px 20px 20px;
+  background: white;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: center;
+  position: relative; /* Để menu neo vào đây */
+  z-index: 20;
+}
+
+/* --- RIGHT PANEL --- */
+.builder-right {
+  flex: 1; /* Chiếm hết chiều ngang còn lại */
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.builder-right img,
+.builder-right svg {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Ngăn ảnh đè lên text */
+}
+
+/* Ẩn hoặc thu nhỏ icon placeholder nếu nó là svg trang trí */
+.builder-right > svg {
+    width: 50px; /* Ví dụ: ép nhỏ nó lại */
+    opacity: 0.1; /* Hoặc làm mờ */
+    position: absolute;
+    z-index: 0;
+}
+
+.right-header {
+  padding: 15px 25px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  height: 50px; /* Cố định chiều cao header phải */
+  flex-shrink: 0;
+}
+
+.right-content {
+  flex: 1;
+  overflow-y: auto; /* Chỉ cuộn nội dung form */
+  padding: 25px;
+}
+
+/* --- COMPONENTS UI --- */
+
+/* Input Basic */
+.input-basic {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box; /* Fix lỗi tràn input */
+}
+.input-basic:focus { border-color: #3b82f6; ring: 2px solid #93c5fd; }
+
+/* Block Item */
+.block-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.block-item:hover { border-color: #9ca3af; }
+.block-item.active { border-color: #2563eb; background-color: #eff6ff; ring: 1px solid #2563eb; }
+
+.block-name { font-weight: 700; font-size: 13px; color: #374151; text-transform: uppercase; }
+.block-desc { font-size: 12px; color: #6b7280; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+
+/* Buttons */
+.btn-save, .btn-preview {
+  color: white; border: none; padding: 8px 14px; border-radius: 6px;
+  cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500; font-size: 13px;
+}
+.btn-save { background-color: #10b981; }
+.btn-save:hover { background-color: #059669; }
+.btn-preview { background-color: #6b7280; }
+.btn-preview:hover { background-color: #4b5563; }
+
+.btn-add {
+  background: #2563eb; color: white; border: none; padding: 12px 24px;
+  border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3); transition: transform 0.2s;
+}
+.btn-add:hover { transform: translateY(-2px); background: #1d4ed8; }
+
+.icon-action { padding: 4px; color: #9ca3af; border-radius: 4px; transition: 0.2s; }
+.icon-action:hover { color: #3b82f6; background: #e0f2fe; }
+.icon-action.delete:hover { color: #ef4444; background: #fee2e2; }
+
+/* Form Fields Right Panel */
+.form-group { margin-bottom: 20px; }
+.label { display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+.input-field, .select-field, .textarea-field {
+  width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; box-sizing: border-box;
+}
+.textarea-field { min-height: 100px; resize: vertical; }
+
+/* Array & Image */
+.array-box { background: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px; }
+.array-row { background: white; border: 1px solid #e5e7eb; padding: 15px; margin-bottom: 10px; border-radius: 6px; position: relative; }
+.btn-add-item { font-size: 12px; background: #dbeafe; color: #1e40af; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+.btn-remove-item { position: absolute; top: 10px; right: 10px; color: #ef4444; cursor: pointer; background: none; border: none; }
+
+.upload-box {
+  border: 2px dashed #d1d5db;
+  padding: 30px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  background: white; /* Thêm nền trắng để tránh trong suốt */
+  overflow: hidden; /* CỰC KỲ QUAN TRỌNG: Cắt bỏ phần thừa nếu ảnh quá to */
+  position: relative;
+}
+
+.upload-box:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.preview-img {
+  width: 100%;         /* Chiếm hết chiều ngang cho phép */
+  max-width: 100%;     /* Không bao giờ to hơn cha */
+  height: 160px;       /* Chiều cao cố định (bạn đã có) */
+  object-fit: cover;   /* Cắt ảnh vừa khung mà không bị méo */
+  border-radius: 8px;
+  margin-top: 10px;
+  border: 1px solid #e5e7eb;
+  display: block;      /* Tránh khoảng trắng thừa ở dưới ảnh */
+}
+.btn-remove-img { width: 100%; background: #fee2e2; color: #b91c1c; border: none; padding: 8px; margin-top: 8px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; }
+
+.right-content img, 
+.right-content svg,
+.right-content video {
+  max-width: 100%;
+  height: auto; /* Giữ tỷ lệ ảnh */
+  display: block;
+}
+
+/* Preview Fullscreen */
+.preview-container { flex: 1; background: white; overflow-y: auto; height: 100%; border-radius: 12px; }
+
+.left-header-area {
+  padding: 20px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #f3f4f6;
+  background: #fff;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Khoảng cách giữa các dòng */
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Group input để chia cột (Giá - Thời gian) */
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.input-basic {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.input-basic:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
