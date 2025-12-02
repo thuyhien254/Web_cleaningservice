@@ -27,15 +27,14 @@ const Footer = () => {
           <ul>
             <li><a href="#about">About Us</a></li>
             <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact Us</a></li>
+            <li><a href="/contact">Contact Us</a></li>
           </ul>
         </div>
 
         <div className="footer-col">
           <h4>Opening Hours</h4>
-          <p>Monday - Friday</p>
-          <p>9am - 8pm</p>
-          <p>Sat-Sun: <span className="closed">CLOSED</span></p>
+          <p>Monday - Sunday</p>
+          <p>7am - 7pm</p>
         </div>
       </div>
 

@@ -14,7 +14,7 @@ import TaskTabsSection from "../ServiceBlock/TaskTabsSection";
 import ProcessSection from "../ServiceBlock/ProcessSection";
 import BookingSection from "../ServiceBlock/BookingSection";
 
-// --- COMPONENT CON: DYNAMIC FIELD (ĐÃ FIX LỖI DROPDOWN & THÊM DÒNG) ---
+// --- COMPONENT CON: DYNAMIC FIELD (FIXED: Support Primitive Arrays & Objects) ---
 const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
   
   // 1. Input Text / Number
@@ -49,7 +49,7 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
     );
   }
 
-  // 3. Select Box - [FIXED] Xử lý cả mảng string ['a','b'] và object [{label, value}]
+  // 3. Select Box
   if (fieldConfig.type === "select") {
     return (
       <div className="form-group">
@@ -109,13 +109,19 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
     );
   }
 
-  // 5. Array (List Items) - [FIXED] Tự động điền số thứ tự
+  // 5. Array (List Items) - FIXED LOGIC
   if (fieldConfig.type === "array") {
     const items = Array.isArray(value) ? value : [];
 
     const handleAddItem = () => {
-        const newItem = {};
-        if (fieldConfig.itemSchema) {
+        // Kiểm tra schema
+        const hasSubFields = fieldConfig.itemSchema && Object.keys(fieldConfig.itemSchema).length > 0;
+        
+        // Detect Primitive vs Object
+        const isLikelyPrimitive = items.length > 0 && typeof items[0] !== 'object';
+        
+        if (!isLikelyPrimitive && hasSubFields) {
+            const newItem = {};
             Object.keys(fieldConfig.itemSchema).forEach(key => {
                 if (key === 'number' || key === 'step_number' || key === 'order') {
                     newItem[key] = items.length + 1; 
@@ -123,8 +129,11 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
                     newItem[key] = ""; 
                 }
             });
+            onChange(fieldKey, [...items, newItem]);
+        } else {
+            // Thêm string rỗng cho mảng đơn giản
+            onChange(fieldKey, [...items, ""]); 
         }
-        onChange(fieldKey, [...items, newItem]);
     };
 
     return (
@@ -144,20 +153,31 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
               >
                 <FaTrash size={14} />
               </button>
-              {fieldConfig.itemSchema && Object.entries(fieldConfig.itemSchema).map(([subKey, subConfig]) => (
-                <DynamicField
-                  key={subKey}
-                  fieldKey={subKey}
-                  fieldConfig={subConfig}
-                  value={item[subKey]}
-                  onUpload={onUpload}
-                  onChange={(k, v) => {
-                    const newItems = [...items];
-                    newItems[idx] = { ...newItems[idx], [k]: v };
-                    onChange(fieldKey, newItems);
-                  }}
-                />
-              ))}
+              
+              {fieldConfig.itemSchema && Object.entries(fieldConfig.itemSchema).map(([subKey, subConfig]) => {
+                // --- FIXED DISPLAY LOGIC ---
+                const isPrimitive = typeof item !== 'object' || item === null;
+                const valToPass = isPrimitive ? item : item[subKey];
+
+                return (
+                  <DynamicField
+                    key={subKey}
+                    fieldKey={subKey}
+                    fieldConfig={subConfig}
+                    value={valToPass} // Hiển thị đúng string
+                    onUpload={onUpload}
+                    onChange={(k, v) => {
+                      const newItems = [...items];
+                      if (isPrimitive) {
+                        newItems[idx] = v; // Update trực tiếp string
+                      } else {
+                        newItems[idx] = { ...newItems[idx], [k]: v };
+                      }
+                      onChange(fieldKey, newItems);
+                    }}
+                  />
+                );
+              })}
             </div>
           ))}
           {items.length === 0 && (
@@ -169,7 +189,6 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
       </div>
     );
   }
-
   return null;
 };
 
@@ -181,11 +200,10 @@ const ServiceBuilder = () => {
 
   const [schemas, setSchemas] = useState({});
   
-  // --- [UPDATED] THÊM TRƯỜNG DESCRIPTION VÀO STATE ---
   const [basicInfo, setBasicInfo] = useState({ 
     name: "", 
     slug: "", 
-    description: "", // Thêm trường này
+    description: "", 
     original_price: 0, 
     duration: 60      
   });
@@ -204,8 +222,8 @@ const ServiceBuilder = () => {
 
     const fetchData = async () => {
       try {
-        // 1. Lấy Schema
-        const schemaRes = await fetch("http://localhost:3000/api/admin/services/block-schemas", {
+        // 1. Get Schema
+        const schemaRes = await fetch("https://hello-node-render.onrender.com/api/admin/services/block-schemas", {
           headers: { Authorization: `Bearer ${token}` }
         });
         const schemaData = await schemaRes.json();
@@ -215,20 +233,19 @@ const ServiceBuilder = () => {
            setSchemas(finalSchemas);
         }
 
-        // 2. Lấy dữ liệu Service
+        // 2. Get Service Data
         if (isEditMode) {
-          const serviceRes = await fetch(`http://localhost:3000/api/admin/services/${id}`, {
+          const serviceRes = await fetch(`https://hello-node-render.onrender.com/api/admin/services/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const serviceData = await serviceRes.json();
           const service = serviceData?.data?.service;
           
           if (service) {
-            // --- [UPDATED] LOAD DESCRIPTION TỪ API ---
             setBasicInfo({
               name: service.name || "",
               slug: service.slug || "",
-              description: service.description || "", // Load description
+              description: service.description || "",
               original_price: service.base_price || 0,
               duration: service.duration_minutes || 60,
             });
@@ -252,13 +269,50 @@ const ServiceBuilder = () => {
     fetchData();
   }, [id, isEditMode]);
 
+  // --- AUTO SYNC PRICING TO BOOKING ---
+  useEffect(() => {
+    const pricingBlock = blocks.find(b => b.type === "pricing");
+    const bookingBlock = blocks.find(b => b.type === "booking");
+
+    if (pricingBlock && bookingBlock) {
+      const subServices = pricingBlock.data.subservices || [];
+      
+      // Lấy danh sách ID
+      const newOptions = subServices.map(s => s.id).filter(id => id); 
+
+      const formSchema = bookingBlock.data.form_schema || [];
+      const fieldIndex = formSchema.findIndex(f => f.field_name === "subservice_id");
+
+      if (fieldIndex !== -1) {
+        const currentField = formSchema[fieldIndex];
+        if (JSON.stringify(currentField.options) !== JSON.stringify(newOptions)) {
+          console.log("Auto-syncing Pricing IDs to Booking form...");
+          
+          const newBlocks = blocks.map(b => {
+            if (b._tempId === bookingBlock._tempId) {
+              const newSchema = [...b.data.form_schema];
+              newSchema[fieldIndex] = {
+                ...newSchema[fieldIndex],
+                options: newOptions // Lưu mảng string ID
+              };
+              return { ...b, data: { ...b.data, form_schema: newSchema } };
+            }
+            return b;
+          });
+          setBlocks(newBlocks);
+        }
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocks]);
+
   // --- UPLOAD IMAGE ---
   const handleUploadImage = async (file) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("image", file);
     try {
-      const res = await fetch("http://localhost:3000/api/upload/image", {
+      const res = await fetch("https://hello-node-render.onrender.com/api/upload/image", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -317,10 +371,9 @@ const ServiceBuilder = () => {
 
     if (!basicInfo.name || !basicInfo.name.trim()) return alert("Nhập tên dịch vụ!");
 
-    // --- [UPDATED] GỬI DESCRIPTION LÊN SERVER ---
     const payload = {
       name: basicInfo.name.trim(),
-      description: basicInfo.description, // Gửi description
+      description: basicInfo.description,
       base_price: Number(basicInfo.original_price),
       duration_minutes: Number(basicInfo.duration),
       ...(basicInfo.slug && { slug: basicInfo.slug.trim() }), 
@@ -328,8 +381,8 @@ const ServiceBuilder = () => {
     };
 
     const url = isEditMode 
-      ? `http://localhost:3000/api/admin/services/${id}` 
-      : `http://localhost:3000/api/admin/services`;
+      ? `https://hello-node-render.onrender.com/api/admin/services/${id}` 
+      : `https://hello-node-render.onrender.com/api/admin/services`;
 
     try {
       const res = await fetch(url, {
@@ -386,14 +439,12 @@ const ServiceBuilder = () => {
               </div>
             </div>
 
-            {/* Input Name */}
             <div className="input-group">
               <label className="input-label">Tên Dịch Vụ</label>
               <input type="text" className="input-basic" placeholder="VD: Dọn dẹp nhà..."
                 value={basicInfo.name} onChange={(e) => setBasicInfo({ ...basicInfo, name: e.target.value })} />
             </div>
 
-            {/* --- [UPDATED] INPUT MÔ TẢ DỊCH VỤ --- */}
             <div className="input-group" style={{marginTop: '10px'}}>
               <label className="input-label">Mô tả ngắn</label>
               <textarea 
@@ -406,7 +457,6 @@ const ServiceBuilder = () => {
               />
             </div>
 
-            {/* Input Giá & Thời gian */}
             <div className="input-row" style={{marginTop: '10px'}}>
               <div className="input-group">
                 <label className="input-label">Giá (VNĐ)</label>
@@ -498,8 +548,7 @@ const ServiceBuilder = () => {
           <div className="builder-right">
             <div className="right-header">
               <h3 style={{ margin: 0, fontSize: '16px', fontWeight:'700', color:'#111827' }}>{activeSchema.name}</h3>
-              <FaTimes style={{ cursor: "pointer", color:'#9ca3af', fontSize:'18px' }} onClick={() => setActiveBlockId(null)} />
-            </div>
+                <FaTimes className="close-icon" onClick={() => setActiveBlockId(null)} />            </div>
             <div className="right-content">
               {Object.entries(activeSchema.fields).map(([fieldKey, config]) => (
                 <DynamicField 

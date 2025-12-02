@@ -7,7 +7,7 @@ const [loading, setLoading] = useState(true);
 const tokenRef = useRef(localStorage.getItem("token"));
 
 useEffect(() => {
-  fetch("http://localhost:3000/api/admin/stats/dashboard", {
+  fetch("https://hello-node-render.onrender.com/api/admin/stats/dashboard", {
     headers: { Authorization: `Bearer ${tokenRef.current}` }
   })
     .then((res) => res.json())

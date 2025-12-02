@@ -36,7 +36,7 @@ const AdminServiceCreate = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:3000/api/admin/services/block-schemas", {
+    fetch("https://hello-node-render.onrender.com/api/admin/services/block-schemas", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {
@@ -122,7 +122,7 @@ const AdminServiceCreate = () => {
       layout_config: serviceForm.layout_config
     };
 
-    fetch("http://localhost:3000/api/admin/services", {
+    fetch("https://hello-node-render.onrender.com/api/admin/services", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -9,7 +9,7 @@
   background-color: #f3f4f6;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   box-sizing: border-box;
-  overflow: hidden; /* Chặn cuộn trang chính */
+  overflow: hidden;
 }
 
 /* --- LEFT PANEL --- */
@@ -187,16 +187,17 @@
 .btn-remove-item { position: absolute; top: 10px; right: 10px; color: #ef4444; cursor: pointer; background: none; border: none; }
 
 .upload-box {
+  width: 140px;     /* nhỏ lại */
+  height: 120px;
   border: 2px dashed #d1d5db;
-  padding: 30px;
-  text-align: center;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-  background: white; /* Thêm nền trắng để tránh trong suốt */
-  overflow: hidden; /* CỰC KỲ QUAN TRỌNG: Cắt bỏ phần thừa nếu ảnh quá to */
-  position: relative;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  margin-top: 6px;
 }
+
 
 .upload-box:hover {
   border-color: #3b82f6;
@@ -277,4 +278,23 @@
 .input-basic:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+.close-icon {
+  font-size: 20px;         /* thu nhỏ icon */
+  cursor: pointer;
+  color: #9ca3af;
+
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  width: auto !important;
+  height: auto !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-icon:hover {
+  color: #ef4444;
 }

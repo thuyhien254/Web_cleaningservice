@@ -29,7 +29,7 @@ const ServicesSection = () => {
             We provide flexible cleaning plans to keep your home spotless.
             Regular or one-time — your choice!
           </p>
-           <Link to="/house-cleaning" className="readmore-btn">
+           <Link to="/services/1" className="readmore-btn">
             Read more →
           </Link>
         </div>
@@ -41,7 +41,7 @@ const ServicesSection = () => {
             Our moving experts make relocating your home stress-free — from
             packing to transportation.
           </p>
-          <Link to="/house-moving" className="readmore-btn">
+          <Link to="/services/2" className="readmore-btn">
             Read more →
           </Link>
         </div>

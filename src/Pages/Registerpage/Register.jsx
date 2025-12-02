@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Registerpage/Register.css";
 import logonoword from "../../assets/logonoword.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ const SignUpPage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -44,7 +47,7 @@ const SignUpPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch("https://hello-node-render.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -118,16 +121,27 @@ const SignUpPage = () => {
               />
             </div>
 
-            <div className="input-group full-width">
+            <div className="input-group full-width password-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Min 6 characters"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <div className="password-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Min 6 characters"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+
+                <span
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEye/> : <FaEyeSlash />}
+                </span>
+              </div>
             </div>
+
 
             <div className="checkbox-group full-width">
               <input

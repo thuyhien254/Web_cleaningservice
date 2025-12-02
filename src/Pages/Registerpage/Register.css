@@ -111,6 +111,29 @@ html {
   border-color: #2b85d6;
   box-shadow: 0 0 0 3px rgba(43, 133, 214, 0.15);
 }
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 42px; /* chừa chỗ cho icon */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #666;
+  transition: 0.2s;
+}
+
+.toggle-password:hover {
+  color: #000;
+}
 
 /* REGISTER GRID */
 .signup-form-grid {

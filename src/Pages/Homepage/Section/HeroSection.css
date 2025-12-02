@@ -26,7 +26,7 @@
   text-align: center;
   color: #000;
   width: 100%;
-  top: -200px;
+  top: -180px;
 }
 
 .hero-content {
@@ -43,19 +43,3 @@
   margin-bottom: 32px;
 }
 
-.quote-btn {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 14px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-  margin-top: -10px;
-}
-
-.quote-btn:hover {
-  background-color: #005ecb;
-}

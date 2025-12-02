@@ -30,7 +30,7 @@ const PricingSection = ({ data }) => {
       {data?.note && (
         <div className="pricing-notes">
           <div className="note-title">
-            <span>Lưu ý</span>
+            <span>Note</span>
           </div>
           <div 
             className="note-content-html"

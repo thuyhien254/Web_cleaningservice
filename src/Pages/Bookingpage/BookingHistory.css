@@ -139,3 +139,150 @@
 .assigned-tag.empty {
   background: #b3b3b3;
 }
+.cleaner-click {
+  color: #1e90ff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cleaner-click:hover {
+  text-decoration: underline;
+}
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.cleaner-info-popup {
+  width: 420px;
+  padding: 25px 32px;
+  background: #fff;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+  animation: fadeIn 0.25s ease-out;
+}
+
+.cleaner-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: #1e3a8a;
+}
+
+.cleaner-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 10px auto 18px auto;
+}
+
+.cleaner-info-popup p {
+  text-align: left;
+  font-size: 15px;
+  margin: 6px 0;
+  color: #333;
+}
+
+.cleaner-info-popup b {
+  font-weight: 700;
+}
+
+.close-cleaner-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #606b80;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 700;
+  transition: 0.2s;
+}
+.close-cleaner-btn:hover {
+  background: #4d5566;
+}
+/* CANCEL BUTTON */
+.cancel-btn {
+  padding: 8px 14px;
+  background: #ff7575;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.cancel-btn:hover {
+  background: #e04848;
+}
+
+/* POPUP XÁC NHẬN HỦY */
+.popup-confirm {
+  width: 380px;
+  padding: 28px;
+  background: #fff;
+  border-radius: 16px;
+  text-align: center;
+  animation: fadeIn 0.25s ease-out;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+}
+
+.popup-confirm h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+  letter-spacing: 0.3px;
+}
+
+.popup-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.yes-btn {
+  padding: 10px 22px;
+  background: #1e90ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  min-width: 90px;
+}
+
+.yes-btn:hover {
+  background: #1872cc;
+}
+
+.no-btn {
+  padding: 10px 22px;
+  background: #b4b4b4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  min-width: 90px;
+}
+
+.no-btn:hover {
+  background: #9a9a9a;
+}

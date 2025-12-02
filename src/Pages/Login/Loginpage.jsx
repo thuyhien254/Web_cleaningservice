@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";   
 import "../Login/Loginpage.css";
 import logonoword from "../../assets/logonoword.png";
@@ -14,7 +15,9 @@ const Loginpage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();                       
+  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+                       
 
   const from = location.state?.from || "/";
 
@@ -31,7 +34,7 @@ const Loginpage = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch("https://hello-node-render.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -69,7 +72,7 @@ const Loginpage = () => {
             <img src={logonoword} className="logo-img" alt="logo" />
           </div>
           <h1>HappyHome</h1>
-          <p>Dịch vụ vệ sinh & chăm sóc nhà cửa hàng đầu.</p>
+          <p>Top cleaning & home care services.</p>
         </div>
 
         <div className="form-section">
@@ -94,16 +97,25 @@ const Loginpage = () => {
               />
             </div>
 
-            <div className="input-group">
+           <div className="input-group password-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
+              <div className="password-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+
+                <span
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
             </div>
 
             <div className="checkbox-group">

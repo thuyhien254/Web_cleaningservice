@@ -9,6 +9,7 @@ const AdminBooking = () => {
   const [assignBooking, setAssignBooking] = useState(null);
   const [availableCleaners, setAvailableCleaners] = useState([]);
   const [viewCleaner, setViewCleaner] = useState(null);
+  const [search, setSearch] = useState("");
 
   const ROWS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +18,7 @@ const AdminBooking = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:3000/api/admin/bookings", {
+    fetch("https://hello-node-render.onrender.com/api/admin/bookings", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -29,19 +30,46 @@ const AdminBooking = () => {
   const loadAvailableCleaners = async (bookingId) => {
     const token = localStorage.getItem("token");
     const res = await fetch(
-      `http://localhost:3000/api/admin/bookings/${bookingId}/available-cleaners`,
+      `https://hello-node-render.onrender.com/api/admin/bookings/${bookingId}/available-cleaners`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     const data = await res.json();
     setAvailableCleaners(data?.data || []);
   };
 
-  // ASSIGN CLEANER
+  // UPDATE STATUS
+  const updateStatus = async (bookingId, newStatus) => {
+    try {
+      const res = await fetch(
+        `https://hello-node-render.onrender.com/api/admin/bookings/${bookingId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+
+      if (!res.ok) return;
+
+      setBookings((prev) =>
+        prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b))
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // ASSIGN CLEANER (chỉ dùng khi chưa có cleaner)
   const handleAssign = async (cleanerId) => {
     if (!cleanerId) return;
+
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/api/admin/bookings/assign", {
+
+      const res = await fetch("https://hello-node-render.onrender.com/api/admin/bookings/assign", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,50 +82,92 @@ const AdminBooking = () => {
       });
 
       const result = await res.json();
-      if (result.success) {
-        alert("Assign thành công!");
-        window.location.reload();
-      } else {
-        alert(result.message || "Assign thất bại.");
-      }
+      if (result.success) window.location.reload();
     } catch (err) {
       console.error("Assign error:", err);
-      alert("Assign thất bại. Kiểm tra console.");
     }
   };
 
-  // ⭐ GET FULL CLEANER INFO
- const fetchCleanerDetail = async (cleanerId) => {
-  const token = localStorage.getItem("token");
-  const res = await fetch(`http://localhost:3000/api/admin/cleaners/${cleanerId}`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  
-  const data = await res.json();
-  if (data.success) setViewCleaner(data.data);
-  else alert(data.message || "Lỗi tải thông tin nhân viên.");
-};
+  // GET CLEANER DETAIL
+  const fetchCleanerDetail = async (cleanerId) => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+      `https://hello-node-render.onrender.com/api/admin/cleaners/${cleanerId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    const data = await res.json();
+    if (data.success) setViewCleaner(data.data);
+  };
+
+  // FILTER BOOKINGS
+  const filteredBookings = bookings.filter((b) => {
+    const customerName =
+      b.booking_data?.full_name ||
+      b.booking_data?.name ||
+      b.customer?.full_name ||
+      "";
+
+    return customerName.toLowerCase().includes(search.toLowerCase());
+  });
 
   // PAGINATION
-  const totalPages = Math.ceil(bookings.length / ROWS_PER_PAGE) || 1;
+  const totalPages = Math.ceil(filteredBookings.length / ROWS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
-  const currentRows = bookings.slice(startIndex, startIndex + ROWS_PER_PAGE);
+  const currentRows = filteredBookings.slice(
+    startIndex,
+    startIndex + ROWS_PER_PAGE
+  );
   const emptyRows = Math.max(ROWS_PER_PAGE - currentRows.length, 0);
 
-  // STATUS TAG UI
-  const statusTag = (status) => {
-    const classes = {
-      PENDING: "pending-tag",
-      CONFIRMED: "confirmed-tag",
-      COMPLETED: "completed-tag",
-      CANCELLED: "cancelled-tag",
-    };
-    return <span className={`status-tag ${classes[status] || ""}`}>{status}</span>;
+  // STATUS BUTTON COMPONENT
+  const StatusButton = ({ b }) => {
+    const [open, setOpen] = useState(false);
+    const statusList = ["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"];
+
+    return (
+      <div className="status-dropdown-wrapper">
+        <button
+          className={`status-tag ${b.status.toLowerCase()}-tag`}
+          onClick={() => setOpen(!open)}
+        >
+          {b.status}
+        </button>
+
+        {open && (
+          <div className="status-dropdown">
+            {statusList.map((s) => (
+              <div
+                key={s}
+                className="dropdown-item"
+                onClick={() => {
+                  updateStatus(b.id, s);
+                  setOpen(false);
+                }}
+              >
+                {s}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
     <div className="table-wrapper">
       <h2 className="table-heading">BOOKING MANAGEMENT</h2>
+
+      {/* SEARCH BAR */}
+      <div className="search-bar-wrapper">
+        <input
+          type="text"
+          className="search-input-full"
+          placeholder="Search by customer name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
       <div className="table-card">
         <table className="main-table">
@@ -115,77 +185,68 @@ const AdminBooking = () => {
           </thead>
 
           <tbody>
-            {currentRows.map((b, index) => {
-               console.log("BOOKING:", b); 
-               return(
-              <tr key={index}>
-                <td>{new Date(b.start_time).toLocaleDateString()}</td>
+            {currentRows.map((b) => {
+              const showName =
+                b.booking_data?.full_name ||
+                b.booking_data?.name ||
+                b.customer?.full_name;
 
-                <td>
-                  {new Date(b.start_time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </td>
+              return (
+                <tr key={b.id}>
+                  <td>{new Date(b.start_time).toLocaleDateString()}</td>
 
-                <td>{b.service?.name}</td>
-                <td>{b.booking_data?.full_name || b.customer?.full_name}</td>
+                  <td>
+                    {new Date(b.start_time).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </td>
 
-                <td>{Number(b.total_price || 0).toLocaleString()} đ</td>
+                  <td>{b.service?.name}</td>
+                  <td>{showName}</td>
 
-                <td>{statusTag(b.status)}</td>
+                  <td>{Number(b.total_price || 0).toLocaleString()} đ</td>
 
-                <td>
-                  <button
-                    className="icon-btn"
-                    onClick={() => setDetailData(b)}
-                  >
-                    <CiCircleMore size={30} />
-                  </button>
-                </td>
+                  <td>
+                    <StatusButton b={b} />
+                  </td>
 
-                <td>
-                  {b.cleaner?.name ? (
-                    <div className="assign-cell">
-                      <span
-                        className="assign-name"
-                        onClick={() => {
-                          if (!b.cleaner?.id) {
-                            alert("Cleaner ID không hợp lệ.");
-                            return;
-                          }
-                            fetchCleanerDetail(b.cleaner.id);
-                        }}
-                      >
-                        {b.cleaner.name}
-                      </span>
+                  <td>
+                    <button className="icon-btn" onClick={() => setDetailData(b)}>
+                      <CiCircleMore size={30} />
+                    </button>
+                  </td>
 
-                      <FaUserPlus
-                        size={9}
-                        className="assign-icon"
-                        onClick={() => {
-                          setAssignBooking(b);
-                          loadAvailableCleaners(b.id);
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="assign-center">
-                      <FaUserPlus
-                        size={9}
-                        className="assign-icon"
-                        onClick={() => {
-                          setAssignBooking(b);
-                          loadAvailableCleaners(b.id);
-                        }}
-                      />
-                    </div>
-                  )}
-                </td>
-              </tr>
-            );
-         })}   
+                  <td>
+                    {b.cleaner ? (
+                      // 🔵 ĐÃ ASSIGN — KHÔNG CHO ĐỔI NGƯỜI
+                      <div className="assign-cell">
+                        <span
+                          className="assign-name"
+                          onClick={() => fetchCleanerDetail(b.cleaner.id)}
+                        >
+                          {b.cleaner.name}
+                        </span>
+                      </div>
+                    ) : (
+                      // 🟢 CHƯA ASSIGN — CHO ASSIGN
+                      <div className="assign-center">
+                        <FaUserPlus
+                          size={14}
+                          className="assign-icon"
+                          onClick={() => {
+                            setAssignBooking(b);
+                            loadAvailableCleaners(b.id);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
 
+            {/* Empty rows for fixed height */}
             {Array.from({ length: emptyRows }).map((_, i) => (
               <tr key={`empty-${i}`}>
                 {Array(8)
@@ -201,7 +262,10 @@ const AdminBooking = () => {
 
       {/* Pagination */}
       <div className="pagination">
-        <button disabled={currentPage === 1} onClick={() => setCurrentPage((p) => p - 1)}>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((p) => p - 1)}
+        >
           {"<"}
         </button>
 
@@ -215,23 +279,30 @@ const AdminBooking = () => {
           </button>
         ))}
 
-        <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((p) => p + 1)}>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((p) => p + 1)}
+        >
           {">"}
         </button>
       </div>
-      {/* --- POPUP DETAIL --- */}
+
+      {/* DETAIL POPUP */}
       {detailData && (
         <div className="popup-overlay">
           <div className="booking-detail-box">
-
             <div className="popup-top-line">
-              <span className="popup-booking-id">Booking ID: {detailData.id}</span>
+              <span className="popup-booking-id">
+                Booking ID: {detailData.id}
+              </span>
             </div>
 
             <h2 className="popup-title-center">BOOKING DETAIL</h2>
 
             <div className="popup-status-center">
-              <span className={`status-tag ${detailData.status.toLowerCase()}-tag`}>
+              <span
+                className={`status-tag ${detailData.status.toLowerCase()}-tag`}
+              >
                 {detailData.status}
               </span>
             </div>
@@ -241,13 +312,13 @@ const AdminBooking = () => {
                 <h3 className="section-title-left">Customer Information</h3>
 
                 <div className="info-row">
-                  <b>Full name:</b> {detailData.booking_data?.full_name}
+                  <b>Full name:</b>{" "}
+                  {detailData.booking_data?.full_name ||
+                    detailData.booking_data?.name}
                 </div>
-
                 <div className="info-row">
                   <b>Phone:</b> {detailData.booking_data?.phone}
                 </div>
-
                 <div className="info-row">
                   <b>Address:</b> {detailData.booking_data?.address}
                 </div>
@@ -269,19 +340,23 @@ const AdminBooking = () => {
                 </div>
 
                 <div className="info-row">
-                  <b>Price:</b> {Number(detailData.total_price).toLocaleString()} đ
+                  <b>Price:</b>{" "}
+                  {Number(detailData.total_price).toLocaleString()} đ
                 </div>
               </div>
             </div>
 
-            <button className="popup-button close" onClick={() => setDetailData(null)}>
+            <button
+              className="popup-button close"
+              onClick={() => setDetailData(null)}
+            >
               Close
             </button>
-
           </div>
         </div>
       )}
-      {/* --- POPUP ASSIGN CLEANER --- */}
+
+      {/* ASSIGN POPUP */}
       {assignBooking && (
         <div className="popup-overlay">
           <div className="assign-box">
@@ -294,7 +369,6 @@ const AdminBooking = () => {
                 availableCleaners.map((c) => (
                   <div className="assign-item" key={c.id}>
                     <span className="cleaner-name">{c.name}</span>
-
                     <button
                       className="choose-btn"
                       onClick={() => handleAssign(c.id)}
@@ -316,7 +390,7 @@ const AdminBooking = () => {
         </div>
       )}
 
-      {/* POPUP CLEANER DETAIL */}
+      {/* CLEANER DETAIL POPUP */}
       {viewCleaner && (
         <div className="popup-overlay">
           <div className="popup-box cleaner-info-popup">

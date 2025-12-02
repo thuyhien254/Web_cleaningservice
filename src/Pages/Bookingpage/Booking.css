@@ -1,10 +1,10 @@
 .booking-page {
   max-width: 600px;
-  margin: 120px auto 60px auto; 
+  margin: 120px auto 60px auto;
   padding: 32px 28px;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
 }
 
 .booking-page-title {
@@ -81,6 +81,32 @@
   outline: none;
 }
 
+/* New Price Section Styling */
+.price-section {
+  margin-top: 20px;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  background-color: #f8f9fa;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+}
+
+.price-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #007bff;
+}
+
+.price-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #28a745;
+  margin-top: 8px;
+  display: inline-block;
+}
+
 .submit-btn {
   width: 100%;
   padding: 14px 0;
@@ -118,7 +144,7 @@
   border-radius: 15px;
   text-align: center;
   width: 380px;
-  box-shadow: 0px 5px 25px rgba(0,0,0,0.25);
+  box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.25);
   animation: popupFadeIn 0.25s ease-out;
 }
 
@@ -168,7 +194,49 @@
   background: #c82333;
 }
 
-@keyframes popupFadeIn {
-  from { transform: scale(0.85); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+/* PRICE SECTION – Clean & Modern */
+.price-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;      /* ép mọi thứ lên cùng 1 hàng */
+  gap: 6px;
+
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+/* BẮT BUỘC THÊM display:flex CHO TỪNG ITEM */
+.price-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;   /* QUAN TRỌNG: dùng baseline thay vì center */
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.price-label,
+.price-value,
+.price-currency {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.1;    
+  color: #000;    
+  display: inline-flex;      
+  align-items: baseline    
+}
+
+.price-value {
+  color: #28a745;
+  font-weight: 700;
+}
+
+.price-currency {
+  color: #28a745;
+  font-weight: 700
 }

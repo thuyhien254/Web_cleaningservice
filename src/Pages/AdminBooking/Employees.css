@@ -1,13 +1,13 @@
-/* WRAPPER + HEADER*/
+/* WRAPPER + HEADER */
 .employee-wrapper {
-   width: 100%;
+  width: 100%;
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
 }
 
 .employee-heading {
-text-align: center;
+  text-align: center;
   font-size: 32px;
   font-weight: 800;
   color: #1e90ff;
@@ -18,34 +18,46 @@ text-align: center;
 
 .employee-top-row {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-input {
+  width: 260px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
 }
 
 .add-btn {
-  width: 100px;
-  height: 50px;
-  background: #1e90ff;
-  color: #fff;
+  background: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
   border: none;
-  border-radius: 12px;
-  font-size: 30px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s ease;
-}
-.add-btn:hover {
-  background: #1d4ed8;
-  transform: translateY(-2px);
+  transition: 0.2s;
 }
 
-/*LAYOUT*/
+.add-btn:hover {
+  background: #005dc1;
+}
+
+/* MAIN LAYOUT */
 .employee-layout {
   display: flex;
   gap: 30px;
 }
 
-/* GRID CARD NHÂN VIÊN*/
+/* EMPLOYEE GRID */
 .employee-grid {
   flex: 2;
   display: grid;
@@ -54,7 +66,7 @@ text-align: center;
 }
 
 .employee-card {
-  background: #ffffff;
+  background: white;
   text-align: center;
   padding: 22px 15px;
   border-radius: 14px;
@@ -73,14 +85,13 @@ text-align: center;
   border: 2px solid #2563eb;
 }
 
-/* Avatar*/
+/* Avatar */
 .employee-avatar {
   width: 90px;
   height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 0 auto 12px auto;
-  display: block;
+  margin: 0 auto 12px;
   border: 3px solid #dbeafe;
   transition: 0.2s ease;
 }
@@ -114,29 +125,17 @@ text-align: center;
   color: #92400e;
 }
 
-/* DETAIL BOX */
+/* DETAIL PANEL */
 .employee-detail {
   flex: 1;
-  background: #ffffff;
-  padding: 25px 25px 35px 25px;
+  background: white;
+  padding: 25px;
   border-radius: 18px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  position: relative;
   min-width: 330px;
+  position: relative;
 }
 
-/* Avatar giữa detail */
-.detail-avatar {
-  width: 130px;
-  height: 130px;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-  margin: 0 auto 15px auto;
-  border: 4px solid #dbeafe;
-}
-
-/* TITLE DETAIL */
 .detail-title {
   text-align: center;
   font-size: 24px;
@@ -145,7 +144,17 @@ text-align: center;
   margin-bottom: 18px;
 }
 
-/* ICON EDIT — góc phải */
+.detail-avatar {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 15px;
+  border: 4px solid #dbeafe;
+}
+
+/* EDIT BUTTON */
 .edit-btn {
   position: absolute;
   top: 15px;
@@ -154,60 +163,129 @@ text-align: center;
   border: none;
   padding: 9px 12px;
   border-radius: 10px;
-  color: #fff;
+  color: white;
   cursor: pointer;
-  transition: 0.2s ease;
   display: flex;
   align-items: center;
+  transition: 0.2s;
 }
+
 .edit-btn:hover {
   background: #1d4ed8;
 }
 
-/*FORM CHỈNH SỬA */
+/* EDIT FORM (only Status) */
 .employee-detail form {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.employee-detail label {
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.employee-detail input,
 .employee-detail select {
-  width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
+  background: #f9fafb;
   border: 1px solid #d1d5db;
   font-size: 15px;
-  background: #f9fafb;
-  transition: 0.2s ease;
 }
 
-.employee-detail input:focus,
 .employee-detail select:focus {
-  outline: none;
   background: white;
   border-color: #1e90ff;
   box-shadow: 0 0 0 2px #93c5fd;
 }
 
-/* Nút submit */
+/* Submit Button */
 .popup-button.save {
   margin-top: 8px;
   width: 100%;
   padding: 12px;
   background: #1e90ff;
+  border-radius: 12px;
   border: none;
   color: white;
   font-weight: bold;
-  border-radius: 12px;
   cursor: pointer;
-  transition: 0.2s ease;
 }
+
 .popup-button.save:hover {
+  background: #197be0;
+}
+
+/* ADD EMPLOYEE POPUP */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-container {
+  width: 520px;
+  background: white;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+}
+
+.popup-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.popup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.popup-grid .full {
+  grid-column: span 2;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.popup-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-save {
   background: #1e90ff;
+  padding: 10px 22px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #ddd;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
 }
