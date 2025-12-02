@@ -21,7 +21,7 @@ const Navbar = () => {
 
   /** LOAD SERVICES LIST **/
   useEffect(() => {
-    fetch("http://localhost:3000/api/services")
+    fetch("https://hello-node-render.onrender.com/api/services")
       .then((res) => res.json())
       .then((data) => setServices(data?.data?.services || []))
       .catch(() => {});

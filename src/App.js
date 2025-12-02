@@ -20,7 +20,7 @@ import Dashboard from "./Pages/AdminBooking/Dashboard.jsx";
 import AdminBooking from "../src/Pages/AdminBooking/AdminBooking.jsx";
 import AdminLayout from "../src/components/Adminlayout.jsx";
 import Employees from "./Pages/AdminBooking/Employees.jsx";
-import Servicelist from "./Pages/AdminBooking/Servicelist.jsx";
+import ServiceList from "./Pages/AdminService/ServiceList";
 import ServiceBuilder from './Pages/AdminService/ServiceBuilder';
 
 import RequireLogin from "../src/components/RequireLogin.jsx";
@@ -79,8 +79,9 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="/admin/booking" element={<AdminBooking />} />
             <Route path="/admin/employees" element={<Employees />} />
-            <Route path="/admin/service" element={<Servicelist />} />
-            <Route path="/admin/service/create" element={<ServiceBuilder />} />
+            <Route path="/admin/services" element={<ServiceList />} />
+            <Route path="/admin/services/create" element={<ServiceBuilder />} />
+            <Route path="/admin/services/:id/builder" element={<ServiceBuilder />} />
           </Route>
 
         </Routes>

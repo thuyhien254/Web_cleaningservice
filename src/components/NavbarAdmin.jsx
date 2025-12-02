@@ -67,8 +67,8 @@ const NavbarAdmin = () => {
 
         <li>
           <Link
-            to="/admin/service"
-            className={isActive("/admin/service") ? "active-link" : ""}
+            to="/admin/services"
+            className={isActive("/admin/services") ? "active-link" : ""}
           >
             Service
           </Link>
