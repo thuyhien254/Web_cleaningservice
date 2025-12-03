@@ -62,6 +62,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative !important;
+  z-index: 20;
+  padding-bottom: 40px; 
 }
 
 .builder-right {
