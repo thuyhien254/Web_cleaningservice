@@ -59,7 +59,7 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
           value={value || ""}
           onChange={(e) => onChange(fieldKey, e.target.value)}
         >
-          <option value="">-- Chọn --</option>
+          <option value="">-- Select --</option>
           {fieldConfig.options?.map((opt, index) => {
             const optValue = typeof opt === 'object' ? opt.value : opt;
             const optLabel = typeof opt === 'object' ? opt.label : opt;
@@ -83,7 +83,7 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
           <div className="upload-box">
             <label style={{ cursor: "pointer", display: 'block' }}>
               <FaImage size={30} color="#9ca3af" style={{ display: 'block', margin: '0 auto 5px' }} />
-              <span style={{ fontSize: '13px', color: '#6b7280' }}>Tải ảnh lên</span>
+              <span style={{ fontSize: '13px', color: '#6b7280' }}>Upload Image</span>
               <input
                 type="file"
                 hidden
@@ -101,7 +101,7 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
           <div style={{ textAlign: 'center' }}>
             <img src={value} alt="Preview" className="preview-img" style={{ maxWidth: '100%', height: 'auto', objectFit:'cover' }} />
             <button className="btn-remove-img" onClick={() => onChange(fieldKey, "")}>
-              Xóa ảnh
+              Delete Image
             </button>
           </div>
         )}
@@ -182,7 +182,7 @@ const DynamicField = ({ fieldKey, fieldConfig, value, onChange, onUpload }) => {
           ))}
           {items.length === 0 && (
             <p style={{ fontSize: "13px", color: "#9ca3af", textAlign: "center", padding: 10 }}>
-              Chưa có dữ liệu
+              No data
             </p>
           )}
         </div>
@@ -432,25 +432,25 @@ const ServiceBuilder = () => {
         <div className="builder-left">
           <div className="left-header-area">
             <div className="header-row">
-              <h2 className="page-title">{isEditMode ? "Sửa Dịch Vụ" : "Tạo Dịch Vụ"}</h2>
+              <h2 className="page-title">{isEditMode ? "Edit Service" : "Create Service"}</h2>
               <div className="btn-group">
-                <button className="btn-preview" onClick={() => setIsPreviewMode(true)}><FaEye /> Xem</button>
-                <button className="btn-save" onClick={handleSave}><FaSave /> Lưu</button>
+                <button className="btn-preview" onClick={() => setIsPreviewMode(true)}><FaEye /> Preview</button>
+                <button className="btn-save" onClick={handleSave}><FaSave /> Save</button>
               </div>
             </div>
 
             <div className="input-group">
-              <label className="input-label">Tên Dịch Vụ</label>
-              <input type="text" className="input-basic" placeholder="VD: Dọn dẹp nhà..."
+              <label className="input-label">Service Name</label>
+              <input type="text" className="input-basic" placeholder="VD: House Cleaning..."
                 value={basicInfo.name} onChange={(e) => setBasicInfo({ ...basicInfo, name: e.target.value })} />
             </div>
 
             <div className="input-group" style={{marginTop: '10px'}}>
-              <label className="input-label">Mô tả ngắn</label>
+              <label className="input-label">Short Description</label>
               <textarea 
                 className="input-basic" 
                 rows={3}
-                placeholder="Mô tả tóm tắt về dịch vụ..."
+                placeholder="Write a short description..."
                 value={basicInfo.description} 
                 onChange={(e) => setBasicInfo({ ...basicInfo, description: e.target.value })} 
                 style={{ resize: 'vertical', minHeight: '60px' }}
@@ -459,18 +459,18 @@ const ServiceBuilder = () => {
 
             <div className="input-row" style={{marginTop: '10px'}}>
               <div className="input-group">
-                <label className="input-label">Giá (VNĐ)</label>
+                <label className="input-label">Price (VNĐ)</label>
                 <input type="number" className="input-basic" value={basicInfo.original_price} onChange={(e) => setBasicInfo({ ...basicInfo, original_price: e.target.value })} />
               </div>
               <div className="input-group">
-                <label className="input-label">Thời gian (Phút)</label>
+                <label className="input-label">Duration (Minutes)</label>
                 <input type="number" className="input-basic" value={basicInfo.duration} onChange={(e) => setBasicInfo({ ...basicInfo, duration: e.target.value })} />
               </div>
             </div>
           </div>
 
           <div className="block-list">
-            {blocks.length === 0 && <div style={{textAlign:'center', color:'#999', padding:20, border:'2px dashed #eee', borderRadius:8}}>Chưa có nội dung.</div>}
+            {blocks.length === 0 && <div style={{textAlign:'center', color:'#999', padding:20, border:'2px dashed #eee', borderRadius:8}}>No content yet</div>}
             {blocks.map((block, index) => {
               const schema = schemas[block.type] || { name: block.type };
               return (
@@ -479,7 +479,7 @@ const ServiceBuilder = () => {
                     <FaGripLines color="#b2bec3" />
                     <div>
                       <div className="block-name">{schema.name}</div>
-                      <div className="block-desc">{block.data.title || block.data.heading || "Không tiêu đề"}</div>
+                      <div className="block-desc">{block.data.title || block.data.heading || "Untitled"}</div>
                     </div>
                   </div>
                   <div className="action-group">
@@ -494,7 +494,7 @@ const ServiceBuilder = () => {
 
           <div className="add-area">
             <button className="btn-add" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <FaPlus /> Thêm Block
+              <FaPlus /> Add Block
             </button>
             {isMenuOpen && (
               <div style={{
@@ -503,7 +503,7 @@ const ServiceBuilder = () => {
                   boxShadow: '0 10px 40px rgba(0,0,0,0.2)', border: '1px solid #e5e7eb',
                   zIndex: 9999, maxHeight: '400px', overflowY: 'auto', padding: '8px 0'
                 }}>
-                <div style={{padding:'8px 16px', fontSize:'11px', fontWeight:'700', color:'#9ca3af', textTransform:'uppercase'}}>Chọn loại nội dung</div>
+                <div style={{padding:'8px 16px', fontSize:'11px', fontWeight:'700', color:'#9ca3af', textTransform:'uppercase'}}>Choose Content Type</div>
                 {Object.values(schemas).map((schema) => (
                   <button key={schema.type} onClick={() => addBlock(schema.type)}
                     style={{
@@ -527,14 +527,14 @@ const ServiceBuilder = () => {
       {isPreviewMode ? (
         <div className="preview-container">
           <div style={{ padding: '15px 25px', borderBottom: '1px solid #e5e7eb', background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position:'sticky', top:0, zIndex:50 }}>
-             <h3 style={{ margin: 0, fontSize: '16px', fontWeight:'700' }}>Xem Trước Giao Diện</h3>
+             <h3 style={{ margin: 0, fontSize: '16px', fontWeight:'700' }}>Live Preview</h3>
              <button onClick={() => setIsPreviewMode(false)} style={{padding:'8px 16px', cursor:'pointer', border:'1px solid #d1d5db', background:'white', borderRadius:'6px', display:'flex', gap:6, alignItems:'center', fontWeight:'500', fontSize:'13px'}}>
-                <FaEdit /> Quay lại sửa
+                <FaEdit /> Back to editor
              </button>
           </div>
           <div style={{paddingBottom: 50}}>
              {blocks.length === 0 
-                ? <p style={{textAlign:'center', padding:50, color:'#9ca3af'}}>Chưa có nội dung</p> 
+                ? <p style={{textAlign:'center', padding:50, color:'#9ca3af'}}>No content yet</p> 
                 : blocks.map(block => (
                     <div key={block._tempId}>
                         {renderBlockPreview(block)}
@@ -567,7 +567,7 @@ const ServiceBuilder = () => {
             <div style={{width:80, height:80, borderRadius:'50%', background:'#f3f4f6', display:'flex', alignItems:'center', justifyContent:'center'}}>
               <FaEdit size={30} color="#d1d5db"/>
             </div>
-            <p style={{color:'#6b7280', fontSize:'15px'}}>Chọn một block bên trái để chỉnh sửa nội dung</p>
+            <p style={{color:'#6b7280', fontSize:'15px'}}>Select a block on the left to start editing</p>
           </div>
         )
       )}

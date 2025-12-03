@@ -1,342 +1,255 @@
-/* --- GIỮ NGUYÊN CÁC PHẦN LAYOUT CHUNG --- */
-.page-container {
-  padding: 30px 20px;
-  background-color: #f3f4f6;
-  min-height: 100vh;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
+/* ========= PAGE WRAPPER + HEADING */
 
-.card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.table-wrapper {
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
-  overflow: hidden;
-  border: 1px solid #e5e7eb;
+  margin: 40px auto;
+  padding: 20px;
 }
 
-.card-header {
-  padding: 24px 30px;
-  border-bottom: 1px solid #e5e7eb;
+.table-heading {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e90ff;
+  margin-bottom: 28px;
+  margin-top: -40px;
+  letter-spacing: 0.8px;
+}
+
+/* ========= FILTER + ADD BUTTON ROW ========= */
+
+.service-header-actions {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  background-color: #fff;
-}
-
-.title {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.subtitle {
-  margin: 4px 0 0 0;
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.header-actions {
-  display: flex;
-  gap: 12px;
+  margin-bottom: 16px;
   align-items: center;
 }
 
-/* --- PHẦN FILTER ĐÃ SỬA --- */
+/* Filter Dropdown (định dạng giống Booking) */
 .filter-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
-  min-width: 200px; /* Đảm bảo đủ rộng để chữ không bị cắt */
-}
-
-.filter-icon {
-  position: absolute;
-  color: #6b7280;
-  font-size: 12px;
-  pointer-events: none; /* Để click xuyên qua icon vào select box */
-  z-index: 10;
-}
-
-.left-icon {
-  left: 12px;
-}
-
-.right-icon {
-  right: 12px;
+  width: 250px;
 }
 
 .custom-select {
-  appearance: none;        /* Xóa style mặc định */
-  -webkit-appearance: none; 
-  -moz-appearance: none;
-  
   width: 100%;
-  padding: 9px 36px 9px 36px; /* Padding trái/phải để tránh đè lên icon */
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid #cfcfcf;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 15px;
+  appearance: none;
+}
+
+.dropdown-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #444;
+}
+
+.add-service-btn {
+  background: #1e90ff;      
+  color: #ffffff !important; 
+  padding: 10px 14px;         
+  border: none !important;   
+  outline: none !important;  
+  border-radius: 10px;       
   font-size: 14px;
-  color: #374151;
-  background-color: white;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.2s;
-  line-height: 1.5;
-}
-
-.custom-select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.custom-select:hover {
-  border-color: #9ca3af;
-}
-
-/* --- BUTTON & TABLE GIỮ NGUYÊN --- */
-.btn-primary {
+  font-weight: 700;
   display: flex;
   align-items: center;
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 9px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  gap: 6px;                   
   cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  white-space: nowrap; /* Không xuống dòng text nút */
+  transition: 0.25s ease;
 }
 
-.btn-primary:hover {
-  background-color: #1d4ed8;
+.add-service-btn:hover {
+  background: #0b6fcc;
 }
 
-/* --- TABLE --- */
-.table-responsive {
-  width: 100%;
+.add-service-btn svg {
+  color: #ffffff !important;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+
+
+/* TABLE CARD */
+
+.table-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
   overflow-x: auto;
 }
 
-.modern-table {
+/* ========= TABLE CORE (giống AdminBooking) ========= */
+
+.main-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
+  table-layout: fixed;
 }
 
-.modern-table thead tr {
-  background-color: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
+.main-table th {
+  background: #f4f7fc;
+  padding: 15px;
+  font-weight: 700;
+  text-align: center;
+  color: #333;
+  font-size: 15.5px;
+  border-bottom: 2px solid #e6e6e6;
 }
 
-.modern-table th {
-  padding: 16px 24px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #6b7280;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
+.main-table td {
+  padding: 15px 10px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+  color: #444;
 }
 
-.modern-table td {
-  padding: 16px 24px;
-  vertical-align: middle;
-  font-size: 14px;
-  color: #1f2937;
-  border-bottom: 1px solid #f3f4f6;
+.main-table tbody tr:hover {
+  background: #fafafa;
 }
 
-.table-row {
-  transition: background-color 0.15s ease;
-}
-
-.table-row:hover {
-  background-color: #f9fafb;
-}
-
-.table-row:last-child td {
-  border-bottom: none;
-}
-
+/* Service Name */
 .service-name {
   font-weight: 600;
-  color: #111827;
-  margin-bottom: 2px;
+  font-size: 16px;
+  color: #222;
 }
 
 .service-id {
   font-size: 12px;
-  color: #9ca3af;
+  color: #777;
+  margin-top: 4px;
 }
 
-.price-cell {
-  font-family: monospace;
-  font-weight: 600;
-  color: #059669;
-}
-
+/* Duration Badge */
 .duration-badge {
-  background-color: #f3f4f6;
-  color: #4b5563;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
+  display: inline-block;
+  padding: 6px 12px;
+  background: #e6f2ff;
+  color: #0055a6;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
 }
+
+/* ========= STATUS BADGE ========= */
 
 .status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;
   font-weight: 600;
-  border: 1px solid transparent;
-  white-space: nowrap;
-}
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  margin-right: 6px;
+  font-size: 13px;
+  min-width: 110px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
 }
 
 .status-badge.active {
-  background-color: #ecfdf5;
-  color: #059669;
-  border-color: #d1fae5;
-}
-.status-badge.active .status-dot {
-  background-color: #059669;
+  background: #a5d8ff;
+  color: #004b85;
 }
 
 .status-badge.inactive {
-  background-color: #f3f4f6;
-  color: #6b7280;
-  border-color: #e5e7eb;
-}
-.status-badge.inactive .status-dot {
-  background-color: #6b7280;
+  background: #ffb3b3;
+  color: #a60000;
 }
 
-.text-right {
-  text-align: right;
+.status-dot {
+  display: none;
+}
+
+
+/* ========= ACTION BUTTONS ========= */
+.main-table th:last-child,
+.main-table td:last-child {
+  width: 140px;               
+  text-align: center !important;
 }
 
 .action-group {
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.btn-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-  background-color: white;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 14px;
-}
-
-.btn-edit {
-  color: #6b7280;
-}
-.btn-edit:hover {
-  border-color: #d1d5db;
-  color: #f59e0b;
-}
-
-.btn-off {
-  color: #ef4444;
-  background-color: #fef2f2;
-  border-color: #fecaca;
-}
-.btn-off:hover {
-  background-color: #fee2e2;
-}
-
-.btn-on {
-  color: #059669;
-  background-color: #ecfdf5;
-  border-color: #a7f3d0;
-}
-.btn-on:hover {
-  background-color: #d1fae5;
-}
-
-.loading-state, .empty-state {
-  padding: 60px;
-  text-align: center;
-  color: #6b7280;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: center;   /* canh giữa theo chiều dọc */
   gap: 12px;
 }
 
-.empty-state svg {
-  color: #d1d5db;
+.btn-icon {
+  width: 30px;       
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s;
+  font-size: 16px;
+
+  outline: none;         /* tắt viền đen */
+  box-shadow: none;      /* đề phòng browser vẽ thêm */
+}
+
+.btn-icon:hover {
+  transform: scale(1.05);
+}
+
+.btn-edit {
+  color: #1e90ff;
+}
+
+.btn-off {
+  color: #d9534f;
+}
+
+.btn-on {
+  color: #1d7a29;
+}
+
+
+/* ========= EMPTY STATE ========= */
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #777;
+}
+
+.empty-state p {
+  margin-top: 12px;
+  font-size: 16px;
+}
+
+/* ========= LOADING ========= */
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  font-size: 17px;
+  color: #555;
 }
 
 .spinner {
-  width: 30px;
-  height: 30px;
-  border: 3px solid #e5e7eb;
-  border-top: 3px solid #2563eb;
+  width: 28px;
+  height: 28px;
+  border: 4px solid #ddd;
+  border-top-color: #1e90ff;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.filter-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-width: 200px;
-}
-
-/* Icon phễu bên trái */
-.filter-icon.left-icon {
-  position: absolute;
-  left: 12px;
-  color: #6b7280;
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* --- CLASS BỌC NGOÀI (Định vị trí) --- */
-.dropdown-arrow {
-  position: absolute;
-  right: 12px;          /* Căn lề phải */
-  top: 0;
-  height: 100%;         /* Chiều cao bằng ô select để căn giữa dọc */
-  display: flex;        /* Dùng flex để căn giữa icon */
-  align-items: center;  /* Căn giữa theo chiều dọc */
-  justify-content: center;
-  pointer-events: none; /* QUAN TRỌNG: Để click xuyên qua div này vào select bên dưới */
-}
-
-/* --- CHỈNH KÍCH CỠ ICON TẠI ĐÂY --- */
-.dropdown-arrow svg {
-  font-size: 14px;      /* <--- Đổi số này để icon to/nhỏ tùy ý */
-  color: #6b7280;       /* Màu xám */
+  margin: 0 auto 10px;
+  animation: spin 0.9s linear infinite;
 }

@@ -134,10 +134,6 @@ const Loginpage = () => {
             </button>
 
             <p className="bottom-text">
-              <Link to="/forgot-password">Forgot password?</Link>
-            </p>
-
-            <p className="bottom-text">
               Don't have an account? <Link to="/signup">Sign up</Link>
             </p>
 
